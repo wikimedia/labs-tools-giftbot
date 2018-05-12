@@ -1,0 +1,29 @@
+# dewiki.config Configuration file
+
+# Configuration template
+
+# Copyright 2010 Giftpflanze
+
+# This file is part of the MediaWiki Tcl Bot Framework.
+
+# The MediaWiki Tcl Bot Framework is free software: you can redistribute
+# it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+
+# Rename to dewiki.config
+# If a variable contains spaces enclose it with {} or ""
+# This file should have mode 600!
+
+set self …
+#set password …
+set email …
+set ircpassword …
+
+#oauth
+set consumer_token …
+set consumer_secret …
+set access_token …
+set access_secret …
+
+return

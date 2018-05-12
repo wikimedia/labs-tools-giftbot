@@ -1,0 +1,42 @@
+TZ=Europe/Berlin
+
+#täglich
+0 0 * * *						jsub		adt.tcl
+0 0 * * *						jsub		check.tcl
+#0 0 * * *						jsub -mem 3g	internallinks.tcl
+7 0 * * *						jsub		kurzeartikel.tcl
+7 0 * * *						jsub		siku.tcl
+7 0 * * *						jsub		wpbvk.tcl
+
+#monatsanfang
+7 0 1 * *						jsub		ibchem.tcl
+7 0 1 * *						jsub		inaktivebots.tcl
+
+#samstags
+7 0 * * 6						jsub		einladung-jwp.tcl
+
+#autoarchiv
+7 0 * * *						jsub -N aa-n	autoarchiv-n.tcl
+7 0 * * *						jsub -N aa-wikt autoarchiv-wikt.tcl
+7  1,2  * * *	[ $(date +\%-H) = 3 ] &&		jsub -N aa-s	autoarchiv-s.tcl -daytime morgens
+7 10,11 * * *	[ $(date +\%H) = 12 ] &&		jsub -N aa-s	autoarchiv-s.tcl -daytime mittags
+7  1,2  * * *	[ $(date +\%-H) = 3 ] &&		jsub -N aa-q	autoarchiv-q.tcl -daytime morgens
+7 10,11 * * *	[ $(date +\%H) = 12 ] &&		jsub -N aa-q	autoarchiv-q.tcl -daytime mittags
+
+#montags
+7 22,23 * * 0	[ $(date +\%-H) = 0 ] &&		jsub		ausrufer.tcl
+
+#mitternacht
+0 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		daysection.tcl
+1 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		rue.tcl
+1 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		picdwba.tcl
+7 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		sg.tcl
+
+#monatsende
+7 0 28-31 * *	[ $(date -d +1day +\%d) -eq 1 ] &&	jsub		kla.tcl
+
+#guandalug
+7 0 1 * *						jsub -N chnd -o /dev/null PHPWikiBot/PHPWikiBot.php login checknotdead
+7 0 * * *						jsub -N lunr -o /dev/null PHPWikiBot/PHPWikiBot.php login list_unreviewed
+7 0 * * *						jsub -N unv  -o /dev/null PHPWikiBot/PHPWikiBot.php login updateuv
+7 0,12 * * *						jsub -N unr  -o unreviewed.out				  unreviewed.sh

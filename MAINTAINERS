@@ -1,0 +1,99 @@
+MAINTAINING GIFTBOT
+-------------------
+
+0. Job descriptions
+
+mg:
+- GiftBot on freenode/#wikipedia-de-mp
+- notifying mentors on new Wunschmentorengesuche
+
+gva:
+- cleaning up WP:Gesichtete Versionen/Anfragen
+
+gvm:
+- GVMBot on freenode/#wikipedia-de-rc
+
+sga:
+- automatic creation of talk pages for new arbcom cases
+
+vm:
+- closing Vandalismusmeldungen when a page is protected
+
+tools:
+- weblinksuche.fcgi
+- deref.fcgi
+
+
+1. Stopping continuous jobs
+
+	$ qdel <mg|gva|gvm|sga|vm> […]
+
+Jobs can be restarted when they're actually terminated, to check:
+
+	$ qstat
+
+They mustn't appear in the output.
+
+
+2. Starting continuous jobs
+
+	$ <mg|gva|gvm|sga|vm> [; …]
+
+
+3. Restarting the tools
+
+Check if the webservice is running:
+
+	$ webservice status
+
+If it is:
+
+	$ webservice restart
+
+If it is not:
+
+	$ webservice --backend kubernetes tcl start
+
+
+4. Updating the code from the repository
+
+	$ git pull
+
+Do not change the working directory without committing or stashing your
+changes!
+
+
+5. Initializing the tool
+
+	$ git clone https://gerrit.wikimedia.org/r/p/labs/tools/giftbot .
+
+Copy over dewiki.config.
+
+Ask for PHPWikiBot/ and GVMBot.*
+
+Create a “state” file for Ausrufer:
+
+	$ ./ausrufer.tcl -mode 0 -ts YYYYMMDD #date of two Mondays before now
+
+	$ ./ausrufer.tcl -mode 0 -ts YYYYMMDD #date of last Monday
+
+Create a “botpausedmentors” file for check.tcl:
+
+	$ tclsh
+
+	% source api.tcl; source dewiki.tcl
+	% set wpmp {Wikipedia:Mentorenprogramm}
+	% set ret1 [post $dewiki {*}$get / titles $wpmp]; return
+	% set templates [lrange [regexp -all -inline {\{\{.*?\n\}\}} [set text [content $ret1]]] 1 end]; return
+	% foreach template $templates {regexp {\n\| Mentor = *?([^ ].*?)\n} $template -> mentor; regsub { {{Anker\|.*?}}} $mentor {} mentor; set mentor [string toupper $mentor 0 0]; if [regexp {\n\| *Pause *= *[Jj]a *\n} $template] {lappend pausedmentors $mentor}}
+	% set pausedmentors
+
+Construct list of mentors that didn't pause themselves and write it:
+
+	% lappend botpausedmentors "…"
+	[repeat]
+	% puts -nonewline [set file [open botpausedmentors w]] $botpausedmentors
+
+Start the crontab, the continuous jobs and the webservice:
+
+	$ crontab crontab; gva; gvm; mg; sga; vm; webservice --backend kubernetes tcl start

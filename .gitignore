@@ -1,0 +1,12 @@
+.*
+*.config
+*.log
+*.out
+*.tgz
+replica.my.cnf
+GVMBot.*
+PHPWikiBot
+botpausedmentors
+key
+lastdump
+state

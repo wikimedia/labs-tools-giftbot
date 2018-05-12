@@ -1,0 +1,5 @@
+-v LC_ALL=en_US.UTF-8
+-mem 1g
+-once
+-j y
+-quiet
