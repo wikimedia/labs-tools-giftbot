@@ -16,14 +16,16 @@
 
 proc handler {handle callback callback2} {
 	if {[gets $handle line] < 0} {
-		error {broken socket}
+		puts {broken socket}
+		exit 1
 	}
 	set list [split $line]
 	if {[lindex $list 0] eq {PING}} {
 		puts $handle "PONG [info hostname] [lindex $list 1]"
 	}
 	if {[lindex $list 0] eq {ERROR}} {
-		error [lrange $list 1 end]
+		puts [lrange $list 1 end]
+		exit 1
 	}
 	if {[lindex $list 1] eq {PRIVMSG}} {
 		apply $callback $line $callback2
