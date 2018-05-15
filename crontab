@@ -29,7 +29,7 @@ TZ=Europe/Berlin
 #mitternacht
 0 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		daysection.tcl
 1 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		rue.tcl
-1 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		picdwba.tcl
+1 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		picdwb.tcl
 7 22,23 * * *	[ $(date +\%-H) = 0 ] &&		jsub		sg.tcl
 
 #monatsende
@@ -39,4 +39,4 @@ TZ=Europe/Berlin
 7 0 1 * *						jsub -N chnd -o /dev/null PHPWikiBot/PHPWikiBot.php login checknotdead
 7 0 * * *						jsub -N lunr -o /dev/null PHPWikiBot/PHPWikiBot.php login list_unreviewed
 7 0 * * *						jsub -N unv  -o /dev/null PHPWikiBot/PHPWikiBot.php login updateuv
-7 0,12 * * *						jsub -N unr  -o unreviewed.out				  unreviewed.sh
+7 0,12 * * *						jsub -N unr  -o /dev/null unreviewed.sh
