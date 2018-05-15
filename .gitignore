@@ -4,6 +4,7 @@
 *.out
 *.tgz
 replica.my.cnf
+service.manifest
 GVMBot.*
 PHPWikiBot
 botpausedmentors
