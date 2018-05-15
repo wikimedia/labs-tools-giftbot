@@ -19,7 +19,7 @@ package require http
 
 source ../library.tcl
 
-set dewiki [get_db dewiki]
+set dewiki [get-db dewiki]
 set wppath https://de.wikipedia.org/wiki/
 set namespaces_common {1 Diskussion 2 Benutzer 3 {Benutzer Diskussion} 4 Wikipedia 5 {Wikipedia Diskussion} 6 Datei 7 {Datei Diskussion} 8 MediaWiki 9 {MediaWiki Diskussion} 10 Vorlage\
  11 {Vorlage Diskussion} 12 Hilfe 13 {Hilfe Diskussion} 14 Kategorie 15 {Kategorie Diskussion} 100 Portal 101 {Portal Diskussion} 828 Modul 829 {Modul Diskussion}}

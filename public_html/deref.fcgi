@@ -16,7 +16,7 @@ namespace import htmlgen::*
 
 source ../library.tcl
 
-set dewiki [get_db dewiki]
+set dewiki [get-db dewiki]
 
 while {[FCGI_Accept] >= 0} {
 	if [catch {
