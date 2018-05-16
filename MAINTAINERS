@@ -33,6 +33,7 @@ Jobs can be restarted when they're actually terminated, to check:
 	$ qstat
 
 They mustn't appear in the output.
+If a job doesn't vanish, ask on freenode/#wikimedia-cloud to delete it.
 
 
 2. Starting continuous jobs
@@ -88,7 +89,8 @@ Create a “botpausedmentors” file for check.tcl:
 	% foreach template $templates {regexp {\n\| Mentor = *?([^ ].*?)\n} $template -> mentor; regsub { {{Anker\|.*?}}} $mentor {} mentor; set mentor [string toupper $mentor 0 0]; if [regexp {\n\| *Pause *= *[Jj]a *\n} $template] {lappend pausedmentors $mentor}}
 	% set pausedmentors
 
-Construct list of mentors that didn't pause themselves and write it:
+Construct list of mentors that didn't pause themselves from the history of
+WP:MP and write it out:
 
 	% lappend botpausedmentors "…"
 	[repeat]
@@ -97,3 +99,79 @@ Construct list of mentors that didn't pause themselves and write it:
 Start the crontab, the continuous jobs and the webservice:
 
 	$ crontab crontab; gva; gvm; mg; sga; vm; webservice --backend kubernetes tcl start
+
+6. Tool monitor
+
+To start, on tools-dev.wmflabs.org run:
+
+	$ ./weblinksuche-launcher.tcl
+
+This script restarts the tool if necessary and writes a job status report on
+BD:Doc Taxon
+
+To check if it runs:
+
+	$ ps -fu tools.giftbot
+
+There should be a line for each of weblinksuche-controller.tcl and
+qstatcheck.tcl.
+
+The stop the monitor:
+
+	$ kill <PID>
+
+The grid jobs can also be checked manually (with qstat, see section 1).
+
+A job in R (restarted) state (uppercase R!) is probably dead and might need
+to be restarted.
+
+7. Checking if continuous jobs are listening to IRC
+
+In an IRC client (e.g. irssi), do:
+
+	/connect irc.wikimedia.org
+	/join #de.wikipedia
+
+See if the corresponding nicks are present. They have the form
+<user>-<jobname>-<jobid>, e.g. giftbot-mg-5608188.
+
+	/part
+	/disconnect
+
+8. Adding something to Navigationsleiste Systematische Sichtung
+
+Create a config file in PHPWikiBot/customMods/config: unreviewed-*.ini:
+
+[default]
+
+startcat[] = ...
+startcat[] = ...
+
+skipcat[] = ...
+skipcat[] = ...
+
+limitUnrev = 0
+doOldRev = true
+destname = ...
+
+
+Add name to unreviewed.sh
+
+Create the page:
+
+<!-- LinkFA-Bot Update -->Letztes Update: dd.mm.yyyy hh:mm:ss
+
+== Ungesichtete Artikel ==
+<!-- LinkFA-Bot START - nicht löschen, nicht verschieben -->
+
+<!-- LinkFA-Bot END - nicht löschen, nicht verschieben -->
+
+== Nachzusichtende Artikel ==
+<!-- LinkFA-Bot TOP - nicht löschen, nicht verschieben -->
+
+<!-- LinkFA-Bot BOTTOM - nicht löschen, nicht verschieben -->
+
+{{Vorlage:Navigationsleiste Systematische Sichtung}}
+
+
+Add the page to the template if it isn't a user page
