@@ -30,7 +30,7 @@ proc debug {code} {
 # API call wrapper
 # call: post $handle / param1 value1 / param2 value2 ...
 proc post {handle args} {
-	global headers replag access_token access_secret consumer_token consumer_secret login_oauth
+	global headers access_token access_secret consumer_token consumer_secret login_oauth
 	oauth::config -accesstoken $access_token -accesstokensecret $access_secret -consumerkey $consumer_token -consumersecret $consumer_secret
 	foreach {/ name value} $args {
 		lappend pairs "[curl::escape $name]=[curl::escape $value]"
