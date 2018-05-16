@@ -86,14 +86,14 @@ register-rc de.wikipedia {{- - title args} {
 						 $tsdiff -format {%H Stunden, %M Minuten und %S Sekunden}])"
 						if ![regexp {\{\{.*?/Vorlage Mentor\}\}} $text] {
 							set token [login [set wiki $dewiki]]
-							if ![dict exists [edit $item {Bot: Wunschmentor wird benachrichtigt} [regsub {({{Mentor gesucht\|.*?)(}})} $text {\1|ja\2}]\
-							 / minor true] edit nochange] {
-								edit BD:$wm "\[\[$item|\]\] wünscht sich dich als Mentor" {Ein Mentee hat dich als Wunschmentor angegeben. – ~~~~} / section new
+							puts [set ret3 [edit $item {Bot: Wunschmentor wird benachrichtigt} [regsub {({{Mentor gesucht\|.*?)(}})} $text {\1|ja\2}] / minor true]]
+							if ![dict exists $ret3 edit nochange] {
+								puts [edit BD:$wm "\[\[$item|\]\] wünscht sich dich als Mentor" {Ein Mentee hat dich als Wunschmentor angegeben. – ~~~~} / section new]
 							}
 							if {[string first "\[\[Benutzer:$wm|" [content [post $dewiki {*}$get / titles $optin / rvsection 2]]] >= 0} {
-								post $dewiki {*}$token {*}$format / action emailuser / target $wm / subject "Wikipedia: $item wünscht sich dich als Mentor"\
+								puts [post $dewiki {*}$token {*}$format / action emailuser / target $wm / subject "Wikipedia: $item wünscht sich dich als Mentor"\
 								 / text "Du erhältst diese Nachricht, weil du in $optin eingetragen bist. Wenn du diese E-Mails nicht mehr erhalten möchtest,\
-								 kannst du dich dort austragen."
+								 kannst du dich dort austragen."]
 							}
 						} else {
 							lappend neulist($no) "bereits betreut"
