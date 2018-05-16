@@ -11,12 +11,11 @@
 # Software Foundation, either version 3 of the License, or (at your option)
 # any later version.
 
-#exit
-
 source api.tcl
 source dewiki.tcl
 source irc.tcl
 
+set quiet true
 set token [login [set wiki $dewiki]]
 
 register-rc de.wikipedia {{channel - title action - - - -} {

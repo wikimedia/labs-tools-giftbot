@@ -16,17 +16,20 @@ source dewiki.tcl
 source irc.tcl
 source library.tcl
 
-set page {Wikipedia:Gesichtete Versionen/Anfragen}
-set watchlist {}
-set token [login [set wiki $dewiki]]
 set bot false
-set firstrun true
+set quiet true
 set dbh [get-db dewiki]
+set token [login [set wiki $dewiki]]
+
+set page {Wikipedia:Gesichtete Versionen/Anfragen}
+
+set watchlist {}
+set firstrun true
 
 register-rc de.wikipedia {{channel - title action - user - comment} {
 	global page self watchlist dewiki get flagged firstrun dbh
-	if {$firstrun || $channel eq {de.wikipedia} && ($title eq $page && $user ne $self || $title in $watchlist || $action in {approve approve-i} && [regexp {\[\[02(.*)10\]\]} $comment\
-	 -> title] && $title in $watchlist)} {
+	if {$firstrun || $channel eq {de.wikipedia} && ($title eq $page && $user ne $self || $title in $watchlist || $action in {approve approve-i} &&\
+	 [regexp {\[\[02(.*)10\]\]} $comment -> title] && $title in $watchlist)} {
 		set firstrun false
 		do {
 			lassign {} newsections watchlist
