@@ -41,22 +41,23 @@ if {0 || !$manual && !$forgotten} {
 		regexp {\n\| Mentor = *?([^ ].*?)\n} $template -> mentor
 		regsub { {{Anker\|.*?}}} $mentor {} mentor
 		set mentor [string toupper $mentor 0 0]
+		set ret14 [post $dewiki {*}$lastcontrib / ucuser $mentor]
+		set active [expr {[clock add [set ts [scan-ts [lastcontrib $ret14]]] 7 days] > [clock seconds]}]
 		if [regexp {\n\| *Pause *= *[Jj]a *\n} $template] {
 			lappend pausedmentors $mentor
-		} else {
-			set ret14 [post $dewiki {*}$lastcontrib / ucuser $mentor]
-			if {[clock add [set ts [scan-ts [lastcontrib $ret14]]] 7 days] < [clock seconds]} {
+			if {$mentor in $botpausedmentors && $active} {
+				regsub "(\n\\| *Mentor *= *$mentor *\n\\| *Pause *=) *(\[Jj\]a) *\n" $text "\\1 \n" text
+				struct::set exclude botpausedmentors $mentor
+				lappend unpausedmentors $mentor
+			}
+		} else { #nicht auf Pause
+			if !$active {
 				lappend pausedmentors $mentor
 				lappend botpausedmentors $mentor
 				lappend newpausedmentors $mentor
 				regsub "(\n\\| *Mentor *= *$mentor *\n\\| *Pause *=) *(\[Nn\]ein)? *\n" $text "\\1 ja\n" text
 			} else {
 				lappend activementors $mentor
-				if {$mentor in $botpausedmentors} {
-					regsub "(\n\\| *Mentor *= *$mentor *\n\\| *Pause *=) *(\[Jj\]a)? *\n" $text "\\1 nein\n" text
-					struct::set exclude botpausedmentors $mentor
-					lappend unpausedmentors $mentor
-				}
 			}
 		}
 		lappend wpmpmentors Benutzer:$mentor
@@ -233,9 +234,9 @@ if {0 || !$manual && !$forgotten} {
 	source ~/library.tcl
 
 	set dewiki_p [get-db dewiki]
-	set templates [mysqlsel $dewiki_p "select page_title from page where page_title like '%/Vorlage_Mentor' and page_namespace in (2, 3)" -list]
+	set templates [mysqlsel $dewiki_p "select page_title from page where page_title like '%/Vorlage\\_Mentor' and page_namespace = 2" -list]
 	foreach template $templates {
-		if {"Benutzer:[set mentor [string map {_ { } {/Vorlage_Mentor} {}} $template]]" ni $catmentors && $mentor ni {{Church of emacs/static} Trinityfolium Reimmichl-212}} {
+		if {"Benutzer:[set mentor [string map {_ { } {/Vorlage_Mentor} {}} $template]]" ni $catmentors && $mentor ni {{Church of emacs/static} Reimmichl-212}} {
 			puts "no mentor @ utmpl $mentor"
 		}
 	}
@@ -270,7 +271,7 @@ foreach page [catmem $ret4] {
 			set mentor {}
 		}
 		set ret5 [post $dewiki {*}$lastcontrib / ucuser [string map {Benutzer: {} Benutzerin: {}} $title]]
-		if [catch {
+		if {[catch {
 			set timestamp [lastcontrib $ret5]
 			if {[set ts [clock add [scan-ts $timestamp] 2 months]] < [clock seconds]} {
 				set ret6 [post $dewiki {*}$get / titles $title]
@@ -299,7 +300,7 @@ foreach page [catmem $ret4] {
 				}
 				set mentor {}
 			}
-		}] {
+		}] && $title ni {{Benutzer:Erich Hunger}}} {
 			puts "timestamp error: $title $ret5"
 		}
 	}
