@@ -24,7 +24,7 @@ foreach {-> chrono -} [regexp -all -inline {\[\[(Wikipedia:Hauptseite/Artikel de
 }
 
 # HAV
-set ret6 [post $dewiki {*}$get / titles {Wikipedia Diskussion:Hauptseite/Artikel des Tages/Verwaltung/Lesenswerte Artikel} / rvsection 2]
+set ret6 [post $dewiki {*}$get / titles {Wikipedia Diskussion:Hauptseite/Artikel des Tages/Verwaltung/Lesenswerte Artikel} / rvsection 1]
 lappend list {*}[dict values [regexp -all -inline {\[\[([^|]*?)\]\]} [content $ret6]]]
 
 # discussed lemmas
