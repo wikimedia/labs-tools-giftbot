@@ -96,6 +96,11 @@ WP:MP and write it out:
 	[repeat]
 	% puts -nonewline [set file [open botpausedmentors w]] $botpausedmentors
 
+Create wikitext parser:
+
+	$ ./parser.tcl
+	$ critcl -pkg parser-critcl.tcl
+
 Start the crontab, the continuous jobs and the webservice:
 
 	$ crontab crontab; gva; gvm; mg; sga; vm; webservice --backend kubernetes tcl start

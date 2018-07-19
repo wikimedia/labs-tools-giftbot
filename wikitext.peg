@@ -1,0 +1,12 @@
+PEG template_parser(wikitext)
+      wikitext  <- ((!'[['!'{{'!'<math>'!'<nowiki>'!'<!--'.)* (link/math/template/nowiki/comment))* (!'[['!'{{'!'<math>'!'<nowiki'!'<!--'.)* !.;
+void: link      <- '[[' ((!'[['!']]'.)* link)* (!'[['!']]'.)* ']]';
+      template  <- '{{' name ('|' (parameter '=')? value)* '}}';
+      name      <- (!'|'!'}}'.)+ (' '/'\n')*;
+      parameter <- (!'|'!'='!'}}'!'<ref '!'<ref>'.)+;
+      value     <- ((!'[['!'{{'!'}}'!'|'!'<nowiki>'!'<!--'!'<ref '!'<ref>'.)* (link/template/nowiki/comment/ref))* (!'[['!'{{'!'}}'!'|'!'<nowiki>'!'<!--'!'<ref '!'<ref>'.)*;
+void: math      <- '<math>' (!'</math>'.)* '</math>';
+void: nowiki    <- '<nowiki>' (!'</nowiki>'.)* '</nowiki>';
+void: comment   <- '<!--' (!'-->'.)* '-->';
+      ref       <- '<ref' (' '/'>') ((!'</ref>'!'/>'!'{{'!'}}'.)* template)* (!'</ref>'!'/>'!'{{'!'}}'.)* ('</ref>'/'/>');
+END;

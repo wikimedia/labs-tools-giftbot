@@ -7,6 +7,8 @@ replica.my.cnf
 service.manifest
 GVMBot.*
 PHPWikiBot
+lib
+parser-critcl.tcl
 botpausedmentors
 key
 lastdump

@@ -3,6 +3,7 @@ alias ll='ls -lv --color=auto --group-directories-first'
 alias grep='grep --color'
 
 alias tclsh='rlwrap /data/project/shared/tcl/bin/tclsh8.7'
+alias critcl='/data/project/shared/tcl/bin/critcl'
 alias nano='jpico'
 
 alias gva='jstart -stderr -j y -v LC_ALL=$LANG -mem 1g gva.tcl'
