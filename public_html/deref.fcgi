@@ -25,7 +25,7 @@ while {[FCGI_Accept] >= 0} {
 		ncgi::import url
 		if [mysqlsel $dewiki "
 			select el_to from externallinks where
-			el_to = '//[set * [mysqlescape $env(HTTP_HOST)$env(SCRIPT_NAME)?url=[string map {= %3D & %26} $url]]]' or
+			el_to = '//[set * [mysqlescape $env(HTTP_HOST)$env(SCRIPT_NAME)?url=[string map {= %3D & %26 # %23 % %25} $url]]]' or
 			el_to = 'http://${*}' or
 			el_to = 'https://${*}'
 		"] {
@@ -34,7 +34,7 @@ while {[FCGI_Accept] >= 0} {
 		} else {
 			puts {HTTP/1.1 403 Forbidden}
 			ncgi::header {text/html; charset=utf-8}
-			pre - $url ist kein gültiger Link.
+			pre - [esc $url] kommt in der deutschsprachigen Wikipedia nicht vor.
 		}
 	}] {
 		pre - $errorInfo
