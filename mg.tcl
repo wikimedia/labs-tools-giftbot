@@ -18,16 +18,17 @@ source dewiki.tcl
 source irc.tcl
 
 set quiet true
+set channel wikipedia-de-mp
 set optin {Wikipedia:Mentorenprogramm/Projektorganisation/Opt-in-Liste}
 
 foreach array {oldlist newlist} {
 	array set $array {1 {} 2 {}}
 }
 
-set fnh [register-fn wikipedia-de-mp {{sender - recipient message} {
-	global fnh newlist
+set fnh [register-fn $channel {{sender - recipient message} {
+	global fnh newlist channel
 	if {$message eq {%status}} {
-		if {$recipient ne {#wikipedia-de-mp}} {
+		if {$recipient ne "#$channel"} {
 			set recipient $sender
 		}
 		if [llength $newlist(1)] {
@@ -43,8 +44,8 @@ set fnh [register-fn wikipedia-de-mp {{sender - recipient message} {
 }}]
 
 register-rc de.wikipedia {{- - title args} {
-	global dewiki catmem get format fnh oldlist newlist wiki token optin
-	if [regexp ^Benutzer: $title] {
+	global dewiki catmem get format fnh oldlist newlist wiki token optin lastcontrib channel
+	if [regexp ^Benutzer(in)?: $title] {
 		array set newlist {1 {} 2 {}}
 		foreach {no category} {2 {Kategorie:Benutzer:Wunschmentor gesucht} 1 {Kategorie:Benutzer:Mentor gesucht}} {
 			set ret [post $dewiki {*}$catmem / cmtitle $category]
@@ -65,7 +66,7 @@ register-rc de.wikipedia {{- - title args} {
 					}
 				}
 				if [llength $addlist($no)] {
-					puts $fnh "PRIVMSG #wikipedia-de-mp :Neue Mentorengesuche: [join $neulist($no) {, }]"
+					puts $fnh "PRIVMSG #$channel :Neue Mentorengesuche: [join $neulist($no) {, }]"
 				}
 			} 2 {
 				set neulist($no) {}
@@ -75,10 +76,10 @@ register-rc de.wikipedia {{- - title args} {
 						continue
 					}
 					if {$item in $newlist(1)} {
-						regsub {\{\{Mentor gesucht\}\}} $text {} text; #effective?
+						regsub {\{\{Mentor gesucht\}\}} $text {} text
 					}
 					if [catch {set tsdiff [expr [clock seconds] - [scan-ts [lastcontrib [post $dewiki {*}$lastcontrib / ucuser $wm]]]]}] {
-						puts $fnh "Ungültiger Wunschmentor@$item: $wm"
+						puts $fnh "PRIVMSG #$channel :Ungültiger Wunschmentor@$item: $wm"
 						continue
 					}
 					if ![llength $notified] {
@@ -102,7 +103,7 @@ register-rc de.wikipedia {{- - title args} {
 					unset wm
 				}
 				if [llength $neulist($no)] {
-					puts $fnh "PRIVMSG #wikipedia-de-mp :Neue Wunschmentorengesuche: [join $neulist($no) {, }]"
+					puts $fnh "PRIVMSG #$channel :Neue Wunschmentorengesuche: [join $neulist($no) {, }]"
 				}
 			}
 			foreach item $dellist($no) {
@@ -120,7 +121,7 @@ register-rc de.wikipedia {{- - title args} {
 				}
 			}
 			if [llength $dellist($no)] {
-				puts $fnh "PRIVMSG #wikipedia-de-mp :erledigt: [join $erllist($no) {, }]"
+				puts $fnh "PRIVMSG #$channel :erledigt: [join $erllist($no) {, }]"
 			}
 			set oldlist($no) $newlist($no)
 		}
