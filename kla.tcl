@@ -39,9 +39,9 @@ set lalist [lmap {-> lemma} [regexp -all -inline {(?w)^# *?'*\[\[(.*)(?:\]\]|\|)
 set latext2 [content [post $dewiki {*}$get / titles {Wikipedia:Lesenswerte Artikel} / rvexpandtemplates true]]
 regsub -all {&nbsp;} $latext2 { } latext2
 set lalist2 [lmap {-> lemma} [regexp -all -inline {(?n)^(?:\[\[Datei:Loudspeaker\.svg\|12px\|verweis=Datei:Loudspeaker\.svg\|Gesprochener Inhalt\]\]\
- )??'*\[\[(?!#|Bild:|Datei:|Kategorie:|ky:)(.*)(?:\]\]|\|)} $latext2] {set lemma}]
+ )??'*\[\[(?!#|Bild:|Datei:|File:|Kategorie:|ky:)(.*)(?:\]\]|\|)} $latext2] {set lemma}]
 set latext3 [content [post $dewiki {*}$get / titles {Wikipedia:Hauptseite/Artikel des Tages/Verwaltung/Lesenswerte Artikel}]]
-set lalist3 [lmap {-> lemma} [regexp -all -inline {(?n)^# *?'*\[\[(?!Kategorie:)(.*)(?:\]\]|\|)} $latext3] {set lemma}]
+set lalist3 [lmap {-> lemma} [regexp -all -inline {(?n)^# *?(?:{{Gesprochen}} )?'*\[\[(?!Kategorie:)(.*)(?:\]\]|\|)} $latext3] {set lemma}]
 
 set eacat [cat Kategorie:Wikipedia:Exzellent 0]
 set eatext [content [post $dewiki {*}$get / titles {Wikipedia:Exzellente Artikel/nach Datum} / rvexpandtemplates true]]
@@ -49,7 +49,7 @@ set ealist [lmap {-> lemma} [regexp -all -inline {(?w)^# *?(?:<li value=".*">)* 
 set eatext2 [content [post $dewiki {*}$get / titles {Wikipedia:Exzellente Artikel} / rvexpandtemplates true]]
 regsub -all {&nbsp;} $eatext2 { } eatext2
 set ealist2 [lmap {-> lemma} [regexp -all -inline {(?n)^(?:\[\[Datei:Loudspeaker\.svg\|12px\|verweis=Datei:Loudspeaker\.svg\|Gesprochener Inhalt\]\]\
- )??'*\[\[(?!#|Bild:|Datei:|Kategorie:|ml:)(.*)(?:\]\]|\|)} $eatext2] {set lemma}]
+ )??'*\[\[(?!#|Bild:|Datei:|File:|Kategorie:|ml:)(.*)(?:\]\]|\|)} $eatext2] {set lemma}]
 set eatext3 [content [post $dewiki {*}$get / titles {Wikipedia:Hauptseite/Artikel des Tages/Verwaltung}]]
 regsub -all {&nbsp;} $eatext3 { } eatext3
 set ealist3 [lmap {-> lemma} [regexp -all -inline {(?n)^# *?(?:{{Gesprochen}} )?'*\[\[(.*)(?:\]\]|\|)} $eatext3] {set lemma}]
@@ -58,14 +58,14 @@ set ilcat [cat {Kategorie:Wikipedia:Informative Liste} 0]
 set iltext [content [post $dewiki {*}$get / titles {Wikipedia:Informative Listen und Portale/Nach Datum} / rvsection 2]]
 set illist [lmap {-> lemma} [regexp -all -inline {(?w)^# *?'*\[\[(.*)(?:\]\]|\|)} $iltext] {set lemma}]
 set iltext2 [content [post $dewiki {*}$get / titles {Wikipedia:Informative Listen und Portale} / rvexpandtemplates true]]
-set illist2 [lmap {-> lemma} [regexp -all -inline {(?n)'*?\[\[(?!#|//|Bild:|Datei:|Hilfe:|Kategorie:|Portal:|Wikipedia:|:Kategorie:)(.*)(?:\]\]|\|)} $iltext2] {set lemma}]
+set illist2 [lmap {-> lemma} [regexp -all -inline {(?n)'*?\[\[(?!#|//|Bild:|Datei:|File:|Hilfe:|Kategorie:|Portal:|Wikipedia:|:Kategorie:)(.*)(?:\]\]|\|)} $iltext2] {set lemma}]
 
 #return; #
 
-puts [edit {Benutzer:GiftBot/KLA} {Unstimmigkeiten} "{| class=\"wikitable\"\n|-\n! !! nur Kategorie !! nur Liste\n|-\n| Lesenswerte Artikel || [join [lmap list [lrange [struct::set intersect3\
+puts [edit {Benutzer:GiftBot/KLA} {Unstimmigkeiten} "{| class=\"wikitable\"\n|-\n! !! nur Kategorie !! nur Liste (nach Datum)\n|-\n| Lesenswerte Artikel || [join [lmap list [lrange [struct::set intersect3\
  $lacat [resolveredirects $lalist]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|-\n| Exzellente Artikel || [join [lmap list [lrange [struct::set intersect3 $eacat\
  [resolveredirects $ealist]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|-\n| Informative Listen || [join [lmap list [lrange [struct::set intersect3 $ilcat\
- [resolveredirects $illist]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|}\n{| class=\"wikitable\"\n|-\n! !! nur Kategorie !! nur Liste (nach Datum)\n|-\n|\
+ [resolveredirects $illist]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|}\n{| class=\"wikitable\"\n|-\n! !! nur Kategorie !! nur Liste\n|-\n|\
  Lesenswerte Artikel || [join [lmap list [lrange [struct::set intersect3 $lacat [resolveredirects $lalist2]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|-\n|\
  Exzellente Artikel || [join [lmap list [lrange [struct::set intersect3 $eacat [resolveredirects $ealist2]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|-\n|\
  Informative Listen || [join [lmap list [lrange [struct::set intersect3 $ilcat [resolveredirects $illist2]] 1 2] {join [lmap lemma $list {set lemma \[\[$lemma\]\]}] {, }}] ||]\n|}\n{|\
