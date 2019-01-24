@@ -37,7 +37,7 @@ register-rc de.wikipedia {{- - title action - user - comment} {
 			foreach {section heading body} [regexp -all -inline {==(.*?)==(\n.*)(?===|$)} $sections] {
 				if {!([regexp {\(erl\.\)|\(erledigt\)} $heading] || [regexp {Benutzer(in)*(:|\|)} $heading]\
 				 || [regexp {(\d{1,3}\.){3}\d{1,3}|([[:xdigit:]]{0,4}:){7}[[:xdigit:]]{1,4}} $heading]) && [regexp {\[\[(.*?)\]\]} $heading -> page]} {
-					set page [string map {\u200e {}} $page]
+					set page [string map {\u200e {} _ { }} $page]
 					set page [string trim $page]
 					set page [string trimleft $page :]
 					set ret2 [post $dewiki {*}$logevents / letype protect / letitle $page / lelimit 1]
