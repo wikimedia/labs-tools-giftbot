@@ -106,7 +106,7 @@ dict set newdict {Benutzersperrungen in Vorbereitung} $list4
 set list5 {}
 set text5 [content [post $dewiki {*}$get / titles Wikipedia:Kurier]]
 set parts [regexp -all -inline {\n= .*? =\n.*?(?=\n= .*? =\n|$)} $text5]
-foreach {regexp list part} [list {\n==([^=].*?)== *\n} kllist [lindex $parts 0] {\n===(.*?)=== *\n} krlist [lindex $parts 1]] {
+foreach {regexp list part} [list {\n==([^=].*?)==[ \t]*\n} kllist [lindex $parts 0] {\n===(.*?)===[ \t]*\n} krlist [lindex $parts 1]] {
 	foreach {match section} [regexp -all -inline $regexp $part] {
 		set section [regsub -all {=(.*)=} $section {\1}]; #3rd level headings
 		set section [regsub -all {{{[Aa]nker\|.*?}}} $section {}]; #anchor template
