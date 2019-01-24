@@ -95,6 +95,7 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 						lappend summary "\[\[$title\]\] erledigt"
 					} elseif {[llength $ret5] && ![lindex $ret5 0] || [llength $ret6] && ![lindex $ret6 0]} {
 						#oldreviewed
+					    if {$title ni $watchlist} {
 						if {[llength $ret5] && ([lindex $ret5 1] eq {} || [lindex $ret5 1] < [set ts [clock format [clock add [clock seconds] -1 day]\
 						-format %Y%m%d%H%M%S]]) || [llength $ret6] && ([lindex $ret6 1] eq {} || [lindex $ret6 1] < $ts)} {
 							lappend newsections $section
@@ -127,6 +128,7 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 						if {$title ne [set title [page $ret4 title]]} {
 							lappend watchlist $title
 						}
+					    }
 					}
 				} else {
 					#missing page or invalid title or special page
