@@ -123,15 +123,19 @@ if {0 || !$manual && !$forgotten} {
 			if [exists newpausedmentors] {
 				puts pause\ mentors:[join $newpausedmentors {, }]
 				foreach mentor $newpausedmentors {
+					if {$mentor ne {Frank Murmann}} {
 					puts [edit BD:$mentor {Du wurdest im Mentorenprogramm auf Pause gesetzt} {Da du länger als 7 Tage keine Bearbeitungen getätigt hast, wurdest du automatisch im\
 					 Mentorenprogramm auf Pause gesetzt. Wenn du wieder aktiv bist, werde ich in der darauffolgenden Nacht die Pause wieder beenden. – ~~~~} / section new]
+					}
 				}
 			}
 			if [exists unpausedmentors] {
 				puts unpause\ mentors:[join $unpausedmentors {, }]
 				foreach mentor $unpausedmentors {
+					if {$mentor ne {Frank Murmann}} {
 					puts [edit BD:$mentor {Deine Pause im Mentorenprogramm wurde beendet} {Da du wieder aktiv bist, habe ich deine Pause im Mentorenprogramm entfernt.\
 					 Falls du weiterhin auf Pause stehen möchtest, dann trage sie bitte wieder ein (sie wird dann auch nicht wieder herausgenommen). – ~~~~} / section new]
+					}
 				}
 			}
 		}
