@@ -70,9 +70,8 @@ proc get-handle {lang wiki {scheme https}} {
 	-cookiefile cookies \
 	-url $scheme://$lang.$wiki.org/w/api.php \
 	-sslverifypeer 0 \
+	-sslsessionidcache 0 \
 	-headervar headers
-	#set login_old($handle) [list {*}$format / action login / lgname $self / lgpassword $password]
-	#set login($handle) [list {*}$format / action clientlogin / username $self / password $password / loginreturnurl $scheme://$lang.$wiki.org/]
 	set login_oauth($handle) $scheme://$lang.$wiki.org/w/api.php
 	return $handle
 }
