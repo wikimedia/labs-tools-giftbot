@@ -16,4 +16,4 @@ foreach w [dict values [regexp -all -inline {<td id="(.*?)"} $body]] k [dict val
 	regsub [format {(?n)(\|%s = ).*} $w] $text [format {\1%s} $k] text
 }
 
-edit $page {Bot: Aktualisierung} $text / minor
+puts [edit $page {Bot: Aktualisierung} $text / minor]
