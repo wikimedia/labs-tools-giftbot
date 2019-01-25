@@ -121,7 +121,7 @@ To check if it runs:
 There should be a line for each of weblinksuche-controller.tcl and
 qstatcheck.tcl.
 
-The stop the monitor:
+To stop the monitor:
 
 	$ kill <PID>
 
