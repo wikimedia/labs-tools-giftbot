@@ -1,5 +1,16 @@
 #!/data/project/shared/tcl/bin/tclsh8.7
 
+# wkdezb.tcl
+
+# Update ECB exchange rates
+
+# Copyright 2019 Giftpflanze
+
+# wkdezb.tcl is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+
 source api.tcl
 source dewiki.tcl
 
