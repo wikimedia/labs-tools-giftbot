@@ -18,11 +18,12 @@ proc cat {cat namespace {exclude {}}} {
 	cont {ret {
 		foreach item [catmem $ret] {
 			dict with item {
-				switch $ns 14 {
+				if {$ns == 14} {
 					if {$title ni $exclude} {
 						lappend return {*}[cat $title $namespace $exclude]
 					}
-				} $namespace {
+				}
+				if {$ns == $namespace} {
 					lappend return $title
 				}
 			}
