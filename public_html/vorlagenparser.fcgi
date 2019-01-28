@@ -58,7 +58,7 @@ while {[FCGI_Accept] >= 0} {
 		set template [string toupper [string map {_ { }} $template] 0 0]
 		ncgi::header text/csv Content-Disposition "attachment; filename=\"$template.csv\""
 
-		lassign {} titles parameters list dict
+		lassign {} parameters list dict
 		if {$template ne {}} {
 			cont {ret {
 				if [dict exists [get $ret] query pages] {
