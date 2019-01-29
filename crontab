@@ -13,6 +13,9 @@ TZ=Europe/Berlin
 7 0 1 * *						jsub		ibchem.tcl
 7 0 1 * *						jsub		inaktivebots.tcl
 
+#quartalsweise
+7 0 1 */3 *						jsub		mineralbilder.tcl
+
 #samstags
 7 0 * * 6						jsub		einladung-jwp.tcl
 

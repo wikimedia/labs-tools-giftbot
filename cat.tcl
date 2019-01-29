@@ -32,4 +32,18 @@ proc cat {cat namespace {exclude {}}} {
 	return $return
 }
 
+proc cat-db {db cat namespace {recursive 1}} {
+	set return {}
+	foreach {ns title} [mysqlsel $db "select page_namespace, page_title from categorylinks, page where cl_from = page_id and page_namespace in (14, [mysqlescape $namespace]) and cl_to =\
+	 '[mysqlescape [string map {{ } _} $cat]]'" -flatlist] {
+		if {$ns == $namespace} {
+			lappend return [string map {_ { }} $title]
+		}
+		if {$ns == 14 && $recursive} {
+			lappend return {*}[cat-db $db $title $namespace $recursive]
+		}
+	}
+	struct::set union [lmap title $return {string map {_ { }} $title}] {}
+}
+
 return
