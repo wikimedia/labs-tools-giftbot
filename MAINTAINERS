@@ -55,6 +55,11 @@ If it is not:
 
 	$ webservice --backend kubernetes tcl start
 
+If it is stuck:
+
+	$ kubectl get pods
+	$ kubectl delete pods <pod-name>
+
 
 4. Updating the code from the repository
 
