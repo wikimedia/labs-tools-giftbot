@@ -42,8 +42,9 @@ while {[FCGI_Accept] >= 0} {
 		ncgi::header {text/html; charset=utf-8}
 		ncgi::reset
 		ncgi::input
-		ncgi::setDefaultValue sub 0
-		ncgi::importAll source sort sub
+		ncgi::setDefaultValue subsource 0
+		ncgi::setDefaultValue subsort 0
+		ncgi::importAll source sort subsource subsort
 		lassign {} visited sourcepages sortcats
 		head ! {
 			title - [set title {Seiten einer Kategorie anhand der Unterkategorien einer anderen Kategorie sortieren}]
@@ -59,14 +60,18 @@ while {[FCGI_Accept] >= 0} {
 							put {&nbsp;}
 							input name=source size=50 value=$source -
 							put {&nbsp;}
-							input name=sub type=checkbox value=1 {*}[expr {$sub?{checked=}:{}}] -
+							input name=subsource type=checkbox value=1 {*}[expr {$subsource?{checked=}:{}}] -
 							put {&nbsp;}
-							label for=sub - Unterkategorien
+							label for=subsource - Unterkategorien
 						}
 						div ! {
 							label for=sort - Sortierkategorie:
 							put {&nbsp;}
 							input name=sort size=50 value=$sort -
+							put {&nbsp;}
+							input name=subsort type=checkbox value=1 {*}[expr {$subsort?{checked=}:{}}] -
+							put {&nbsp;}
+							label for=subsort - Unterkategorien
 						}
 						div ! {
 							input type=submit value=Sortieren -
@@ -75,7 +80,7 @@ while {[FCGI_Accept] >= 0} {
 				}
 				if {[string length $source] && [string length $sort]} {
 					if [catch {
-						set sourcepages [cat [string map {{ } _} $source] $sub]
+						set sourcepages [cat [string map {{ } _} $source] $subsource]
 						set sortcats [lmap {- cat} [join [cat [string map {{ } _} $sort] 0 1]] {set cat}]
 					}] {
 						after 300000
@@ -86,7 +91,7 @@ while {[FCGI_Accept] >= 0} {
 							foreach cat [lsort $sortcats] {
 								li - $cat
 								ul ! {
-									foreach {ns title} [join [lsort [struct::set intersect $sourcepages [cat [string map {{ } _} $cat] 0]]]] {
+									foreach {ns title} [join [lsort [struct::set intersect $sourcepages [cat [string map {{ } _} $cat] $subsort]]]] {
 										li - [a href=${wppath}[uri::urn::quote [set title [set ns [dict get $namespaces $ns]][expr {[llength\
 										 $ns]?{:}:{}}]$title]] . [string map {_ { }} $title]]
 									}
@@ -94,6 +99,11 @@ while {[FCGI_Accept] >= 0} {
 							}
 						}
 					}
+				}
+			}
+			div ! {
+				p ! {
+					a href=https://gerrit.wikimedia.org/r/plugins/gitiles/labs/tools/giftbot/+/master/public_html/kategoriensortieren.fcgi - Quelltext
 				}
 			}
 		}
