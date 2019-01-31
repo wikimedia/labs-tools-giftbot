@@ -1,5 +1,4 @@
 alias ls='ls -v --color=auto --group-directories-first'
-alias ll='ls -lv --color=auto --group-directories-first'
 alias grep='grep --color'
 
 alias tclsh='rlwrap /data/project/shared/tcl/bin/tclsh8.7'
