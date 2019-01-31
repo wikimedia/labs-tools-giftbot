@@ -62,17 +62,15 @@ proc post {handle args} {
 
 # Get API handle
 proc get-handle {lang wiki {scheme https}} {
-	global self email format login_oauth
-	#global password login_old login
+	global self email login_oauth
 	[set handle [curl::init]] configure \
 	-useragent "$self@$lang.$wiki <$email> – MediaWiki Tcl Bot Framework 1.1 (git [string range [exec git rev-parse HEAD] 0 6])" \
 	-encoding all \
 	-cookiefile cookies \
-	-url $scheme://$lang.$wiki.org/w/api.php \
+	-url [set login_oauth($handle) $scheme://$lang.$wiki.org/w/api.php] \
 	-sslverifypeer 0 \
 	-sslsessionidcache 0 \
 	-headervar headers
-	set login_oauth($handle) $scheme://$lang.$wiki.org/w/api.php
 	return $handle
 }
 
