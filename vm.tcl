@@ -45,8 +45,8 @@ register-rc de.wikipedia {{- - title action - user - comment} {
 					 [clock add [set ts [scan-ts [logevents $ret2 timestamp]]] 10 minutes] > [clock seconds]} {
 						append buffer "== $heading (erl.) ==$body<div style='clear:both;padding:0 5px 0 15px; border-left: 2px green solid;border-right:2px green\
 						 solid;'>\[\[[expr {[regexp {^Kategorie:} $page]?":$page":$page}]\]\] wurde von {{ers:noping[string repeat |[logevents $ret2 user] 2]}} am\
-						 [clock format $ts -format {%d. %b. %Y, %H:%M} -locale de -timezone Europe/Berlin] geschützt, [logevents $ret2 params description], Begründung:\
-						 ''[expr {[set ret [logevents $ret2 comment]] eq {} ? {[keine angegeben]} : $ret}]'' – ~~~~</div>\n\n"
+						 [string map {Mrz. Mär. Mai. Mai} [clock format $ts -format {%d. %b. %Y, %H:%M} -locale de -timezone Europe/Berlin]] geschützt, [logevents\
+						 $ret2 params description], Begründung: ''[expr {[set ret [logevents $ret2 comment]] eq {} ? {[keine angegeben]} : $ret}]'' – ~~~~</div>\n\n"
 						lappend summary $page
 					} else {
 						append buffer $section
