@@ -12,14 +12,14 @@
 # any later version.
 
 source api.tcl
-source dewiki.tcl
+source alswiki.tcl
 
-set token [login [set wiki $dewiki]]
+set token [login [set wiki $alswiki]]
 set page Vorlage:Wechselkursdaten/EZB
 
 curl::transfer -url https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html -bodyvar body
 
-set text [content [post $dewiki {*}$get / titles $page]]
+set text [content [post $wiki {*}$get / titles $page]]
 
 regsub {(?n)(\|STAND=).*} $text [format {\1%s} [clock format [clock seconds] -format %Y-%m-%d -timezone Europe/Berlin]] text
 
@@ -27,4 +27,4 @@ foreach w [dict values [regexp -all -inline {<td id="(.*?)"} $body]] k [dict val
 	regsub [format {(?n)(\|%s = ).*} $w] $text [format {\1%s} $k] text
 }
 
-puts [edit $page {Bot: Aktualisierung} $text / minor]
+puts [edit $page {Bötli: Aktualisierung} $text / minor]
