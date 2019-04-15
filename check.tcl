@@ -166,7 +166,8 @@ if {0 || !$manual && !$forgotten} {
 	#Co-Übersicht
 	lappend output {Ein in kursiver Schrift stehender Mentorenname bedeutet, dass der Mentor auf der Seite [[WP:Mentorenprogramm]] auf Pause gesetzt ist: <br/>(per Bot) wegen momentaner\
 	 Inaktivität (von mindestens sieben Tagen), Urlaub, sonstiger Abwesenheit oder weil er zur Zeit keine [[:Kategorie:Benutzer:Wunschmentor gesucht|Wunschmentorengesuche]] empfangen kann\
-	 oder möchte.\n}
+	 oder möchte.}
+	lappend output {}
 	lappend output "{| class=\"wikitable sortable\""
 	lappend output {! Mentor}
 	lappend output {! Co-Mentor 1}
