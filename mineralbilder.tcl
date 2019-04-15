@@ -21,7 +21,7 @@ set token [login [set wiki $dewiki]]
 set db_dewiki [get-db dewiki]
 set db_commons [get-db commonswiki]
 
-set fpsrcpage {Commons:Featured pictures/Objects/Rocks and Minerals}
+set fpsrcpage {Commons:Featured pictures/Objects/Rocks and minerals}
 set qisrcpage {Commons:Quality images/Subject/Objects/Geological objects/Rocks, Minerals, Elements}
 set visrcpage {Commons:Valued images by topic/Objects/Geological objects/Rocks, minerals and elements}
 
@@ -36,7 +36,7 @@ set destpage {Portal Diskussion:Minerale/Galerie}
 
 proc extract-galleries {wiki title} {
 	global get
-	foreach gallery [dict values [regexp -all -inline {<gallery.*?> *\n(.*)\n</gallery>} [string map {\n\n \n} [content [post $wiki {*}$get / titles $title]]]]] {
+	foreach gallery [dict values [regexp -all -inline {<gallery.*?> *\n(.*)\n</gallery>} [string map {\n\n \n} [content [post $wiki {*}$get / titles $title / redirects]]]]] {
 		lappend return {*}[lmap title [dict values [regexp -all -inline {(?n)^(.*?) *(?=\||$)} $gallery]] {string map {Datei: {} Bild: {} File: {} Image: {}} $title}]
 	}
 	return $return
@@ -57,7 +57,7 @@ lappend output "== Neue Bilder =="
 foreach v {fp qi vi} h {{Exzellente Bilder} Qualitätsbilder {Wertvolle Bilder}} {
 	lappend output "=== $h ===" <gallery>
 	foreach image [lsort [set ${v}srclist]] {
-		if {$image ni $destlist} {
+		if {[string length $image] && $image ni $destlist} {
 			set titles {}
 			foreach title [lsort [dict values [regexp -all -inline {(?n)\[\[:de:(.*?)(?=\||$)} [content [post $commons {*}$get / titles File:$image / redirects]]]]] {
 				if {$title in $destcatlist} {
