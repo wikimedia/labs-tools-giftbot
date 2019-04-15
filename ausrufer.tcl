@@ -293,7 +293,7 @@ if {([exists newitems] || [exists klitem] || [exists kritem] || [exists neuitem]
 set templatetext {<noinclude>{{/Doku}}</noinclude>
 }
 if [exists rüitem] {
-	append templatetext "<includeonly>\{\{#ifeq:\{\{\{RÜ\}\}\}||</includeonly>[string map [list | {{{!}}}] ${rüitem}]<includeonly>\}\}</includeonly>"
+	append templatetext "<includeonly>\{\{#ifeq:\{\{\{RÜ\}\}\}||</includeonly>[string map [list | {{{!}}}] ${rüitem}]<includeonly>\}\}</includeonly>\n"
 }
 if [exists newitems] {
 	append templatetext [string map {| {{{!}}}} [join $newitems $itemsep]]
