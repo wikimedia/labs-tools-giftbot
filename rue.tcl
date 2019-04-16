@@ -15,7 +15,7 @@ source api.tcl
 source dewiki.tcl
 
 set text [content [post $dewiki {*}$get / titles Vorlage:Rückblick]]
-foreach {row date} [regexp -all -inline {(?n)\|-.*?\n\|.*\n\|.*\n\|.*<!--.*?(\d{1,2}\. [^ ]*? \d{4}).*?--> *(?:\n|</onlyinclude>)} $text] {
+foreach {row date} [regexp -all -inline {(?n)\n\|-.*?\n\|.*\n\|.*\n\|.*<!--.*?(\d{1,2}\. [^ ]*? \d{4}).*?--> *(?:\n|</onlyinclude>)} $text] {
 	if {[clock add [clock scan $date -format {%d. %B %Y} -locale de -timezone Europe/Berlin] 1 week 1 day] < [clock seconds]} {
 		set text [string map [list $row {}] $text]
 	}
