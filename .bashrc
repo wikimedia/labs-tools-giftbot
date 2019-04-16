@@ -1,7 +1,7 @@
 alias ls='ls -v --color=auto --group-directories-first'
 alias grep='grep --color'
 
-alias tclsh='rlwrap /data/project/shared/tcl/bin/tclsh8.7'
+alias tclsh='rlwrap -c /data/project/shared/tcl/bin/tclsh8.7'
 alias critcl='/data/project/shared/tcl/bin/critcl'
 alias nano='jpico'
 
