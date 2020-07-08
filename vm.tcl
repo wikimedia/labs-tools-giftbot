@@ -1,6 +1,6 @@
 #!/data/project/shared/tcl/bin/tclsh8.7
 
-# vmppbot – VM page protect bot
+# vm.tcl
 
 # Mark VM sections as done when the according pages are protected
 
