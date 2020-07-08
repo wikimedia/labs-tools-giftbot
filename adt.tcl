@@ -28,10 +28,13 @@ set ret6 [post $dewiki {*}$get / titles {Wikipedia Diskussion:Hauptseite/Artikel
 lappend list {*}[dict values [regexp -all -inline {\[\[([^|]*?)\]\]} [content $ret6]]]
 
 # discussed lemmas
-set ret4 [post $dewiki {*}$get / titles {Wikipedia Diskussion:Hauptseite/Artikel des Tages/Vorschläge} / rvsection 1]
-set ret5 [post $dewiki {*}$get / titles {Wikipedia Diskussion:Hauptseite/Artikel des Tages/Zukunft}]
+set ret5 [post $dewiki {*}$format / action expandtemplates / prop wikitext / text {{{Wikipedia Diskussion:Hauptseite/Artikel des Tages/Index}}}]
+foreach {-> title} [regexp -all -inline {\[\[..(/.*?)\|} [get $ret5 expandtemplates wikitext]] {
+	set reti[incr i] [post $dewiki {*}$get / titles "Wikipedia Diskussion:Hauptseite/Artikel des Tages$title" / rvsection 1]
+	lappend dict reti$i $title
+}
 
-foreach {return srctitle} {ret4 {/Vorschläge} ret5 {/Zukunft}} {
+foreach {return srctitle} $dict {
 	foreach {section heading date title} [regexp -all -inline {\n== ([^\n]*?((?:\d{2}\.){2}\d{4}): \[\[([^\n]*?)\]\]) *==\n.*(?=\n=)} [content [set $return]]] {
 		dict lappend rellist [string toupper $title 0 0]\
 		 "\[\[Wikipedia Diskussion:Hauptseite/Artikel des Tages$srctitle#[string map {\[\[ {} \]\] {} <small> {} </small> {}} $heading]|<span style=\"color:#757575;\">$date</span>\]\]"
