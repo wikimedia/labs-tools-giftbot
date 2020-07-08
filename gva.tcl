@@ -60,11 +60,19 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 						#unreviewed
 						puts unreviewed:$user
 						if [llength $user] {
-							puts [edit BD:$user {Dein Eintrag auf [[Wikipedia:Gesichtete Versionen/Anfragen]]}\
-							"{{subst:GESCHLECHT:{{subst:SEITENNAME}}|Lieber|Liebe|Hallo}} {{subst:SEITENNAME}},<br>ich habe deinen Eintrag \[\[:$title\]\] auf\
-							\[\[Wikipedia:Gesichtete Versionen/Anfragen\]\] entfernt, da die Seite über keine gesichteten Versionen verfügt und daher\
-							erstgesichtet werden muss. Deine Seite taucht auf \[\[Spezial:Ungesichtete Seiten\]\] auf und wird sicher bald von einem eifrigen\
-							\[\[Wikipedia:Wikipedianer|Wikipedianer\]\] gesichtet. – ~~~~" / section new / redirect true]
+							if [regexp ^Benutzer(in)?:$user/ $title] {
+								puts [edit BD:$user {Dein Eintrag auf [[Wikipedia:Gesichtete Versionen/Anfragen]]}\
+								"{{subst:GESCHLECHT:{{subst:SEITENNAME}}|Lieber|Liebe|Hallo}} {{subst:SEITENNAME}},<br>ich habe deinen Eintrag \[\[:$title\]\]\
+								auf \[\[Wikipedia:Gesichtete Versionen/Anfragen\]\] entfernt, da sie im Benutzernamensraum nicht gesichtet werden kann. Sie muss\
+								erst in den Artikelnamensraum verschoben werden. Stelle 24 Stunden nach der Verschiebung ggf. einen weiteren Sichtungsantrag.\
+								– ~~~~" / section new / redirect true]
+							} else {
+								puts [edit BD:$user {Dein Eintrag auf [[Wikipedia:Gesichtete Versionen/Anfragen]]}\
+								"{{subst:GESCHLECHT:{{subst:SEITENNAME}}|Lieber|Liebe|Hallo}} {{subst:SEITENNAME}},<br>ich habe deinen Eintrag \[\[:$title\]\]\
+								auf \[\[Wikipedia:Gesichtete Versionen/Anfragen\]\] entfernt, da die Seite über keine gesichteten Versionen verfügt und daher\
+								erstgesichtet werden muss. Deine Seite taucht auf \[\[Spezial:Ungesichtete Seiten\]\] auf und wird sicher bald von einem eifrigen\
+								\[\[Wikipedia:Wikipedianer|Wikipedianer\]\] gesichtet. – ~~~~" / section new / redirect true]
+							}
 						}
 						lappend summary "\[\[$title\]\] entfernt (Erstsichtung erforderlich)"
 					} elseif {[llength $ret5] && [llength $ret6] && [lindex $ret5 0] && [lindex $ret6 0]} {
