@@ -113,6 +113,7 @@ foreach {regexp list part} [list {\n==([^=].*?)==[ \t]*\n} kllist [lindex $parts
 		set section [regsub -all {\[\[.*?\|(.*?)\]\]} $section {\1}]; #link substitution I
 		set section [regsub -all {<(.*?)(?: .*?)*>(.*?)</\1>} $section {\2}]; #tag markup removal I
 		set section [regsub -all {<.*?/>} $section {}]; #tag markup removal II
+		set section [regsub -all {<br>} $section {}]; #br tag removal
 		set section [regsub -all {\[http://[^ ]*? ([^]]*?)\]} $section {\1}]; #weblink substitution
 		set section [string map {\[\[\[\[ &#91;&#91; \]\]\]\] &#93;&#93; \[\[ {} \]\] {} \[ &#91; \] &#93;} $section]; #link substitution II
 		set section [regsub -all {<!--.*-->} $section {}]; #comment removal
