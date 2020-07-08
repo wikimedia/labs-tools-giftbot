@@ -7,7 +7,9 @@ TZ=Europe/Berlin
 7 0 * * *						jsub		kurzeartikel.tcl
 7 0 * * *						jsub		siku.tcl
 7 0 * * *						jsub		wpbvk.tcl
-7 18 * * 1-5						jsub		wkdezb.tcl
+7 18 * * 1-5						jsub		wkdezb-als.tcl
+7 18 * * 1-5						jsub		wkdezb-de.tcl
+7 18 * * 1-5						jsub		wkdezb-frr.tcl
 
 #monatsanfang
 7 0 1 * *						jsub		ibchem.tcl
