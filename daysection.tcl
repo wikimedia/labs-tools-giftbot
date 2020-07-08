@@ -25,7 +25,7 @@ proc heading2 {} {
 }
 
 #does not really detect editconflict, don't know why
-foreach {page id} {{Wikipedia:Kandidaturen von Artikeln, Listen und Portalen} 1 {Wikipedia:Kandidaten für lesenswerte Artikel} 2} {
+foreach {title id} {{Wikipedia:Kandidaturen von Artikeln, Listen und Portalen} 1 {Wikipedia:Kandidaten für lesenswerte Artikel} 2} {
 	if [catch {
 		switch $id {
 			1 {
@@ -38,11 +38,11 @@ foreach {page id} {{Wikipedia:Kandidaturen von Artikeln, Listen und Portalen} 1 
 			}
 		}
 		do {
-			if [regexp $re [set text [content [set ret1 [post $wiki {*}$get / titles $page / rvprop content|timestamp]]]]] {
-				puts [set ret2 [edit $page {Bot: ersetze Tagesabschnitt} [regsub $re $text $subst] / nocreate true / basetimestamp [revision $ret1 timestamp]\
+			if [regexp $re [set text [content [set ret1 [post $wiki {*}$get / titles $title / rvprop content|timestamp]]]]] {
+				puts [set ret2 [edit $title {Bot: ersetze Tagesabschnitt} [regsub $re $text $subst] / nocreate true / basetimestamp [revision $ret1 timestamp]\
 				 / starttimestamp [revision $ret1 timestamp]]]
 			} else {
-				puts [set ret2 [edit $page {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n$subst" / nocreate true]]
+				puts [set ret2 [edit $title {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n$subst" / nocreate true]]
 			}
 		} while {[exists ret2] && [dict exists $ret2 error code] && [dict get $ret2 error code] eq {editconflict}}
 	}] {
@@ -51,19 +51,19 @@ foreach {page id} {{Wikipedia:Kandidaturen von Artikeln, Listen und Portalen} 1 
 	}
 }
 
-foreach page {Wikipedia:Suchhilfe {Wikipedia:Fragen zur Wikipedia} Wikipedia:Auskunft Wikipedia:Löschprüfung} {
+foreach title {Wikipedia:Suchhilfe {Wikipedia:Fragen zur Wikipedia} Wikipedia:Auskunft Wikipedia:Löschprüfung} {
 	do {
-		if [regexp [set re {=[^\n]*?=\Z}] [set text [content [set ret1 [post $wiki {*}$get / titles $page / rvprop content|timestamp]]]]] {
-			puts [set ret2 [edit $page {Bot: ersetze Tagesabschnitt} [regsub $re $text "= [heading] ="] / nocreate true / basetimestamp [revision $ret1 timestamp]]]
+		if [regexp [set re {=[^\n]*?=\Z}] [set text [content [set ret1 [post $wiki {*}$get / titles $title / rvprop content|timestamp]]]]] {
+			puts [set ret2 [edit $title {Bot: ersetze Tagesabschnitt} [regsub $re $text "= [heading] ="] / nocreate true / basetimestamp [revision $ret1 timestamp]]]
 		} else {
-			puts [set ret2 [edit $page {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading] =" / nocreate true]]
+			puts [set ret2 [edit $title {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading] =" / nocreate true]]
 		}
 	} while {[exists ret2] && [dict exists $ret2 error code] && [dict get $ret2 error code] eq {editconflict}}
 }
 
-foreach {page offset} {Wikipedia:LKH 0 Wikipedia:Löschkandidaten/heute 0 Wikipedia:LKG -1 Wikipedia:Löschkandidaten/gestern -1 Wikipedia:LK7 -7 Wikipedia:QSH 0 Wikipedia:Qualitätssicherung/heute 0} {
-	puts [edit $page {Bot: aktualisiere Weiterleitung} [
-		regsub {\d{1,2}\. .* \d{4}} [content [post $dewiki {*}$get / titles $page]] [
+foreach {title offset} {Wikipedia:LKH 0 Wikipedia:Löschkandidaten/heute 0 Wikipedia:LKG -1 Wikipedia:Löschkandidaten/gestern -1 Wikipedia:LK7 -7 Wikipedia:QSH 0 Wikipedia:Qualitätssicherung/heute 0} {
+	puts [edit $title {Bot: aktualisiere Weiterleitung} [
+		regsub {\d{1,2}\. .* \d{4}} [content [post $dewiki {*}$get / titles $title]] [
 			string trim [clock format [clock add [clock seconds] $offset days] -format {%e. %B %Y} -locale de -timezone Europe/Berlin]
 		]
 	] / nocreate true]
