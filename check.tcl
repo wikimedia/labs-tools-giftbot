@@ -355,7 +355,7 @@ if {!$manual && !$forgotten} {
 			set text [content [post $dewiki {*}$get / titles Benutzer:$mentee]]
 			if [regsub {{{Benutzer(in)?:[^\}]*?/Vorlage[ _]Mentor}}\n?} $text {} text] {
 				puts [edit Benutzer:$mentee −mp $text]
-				puts [edit Benutzer_Diskussion:$mentee [set summary {{{ers:ArchivMentee2}}}] {} / appendtext \n$summary / minor true]
+				puts [edit BD:$mentee [set summary {{{ers:ArchivMentee2}}}] {} / appendtext \n$summary / minor true]
 				dict lappend dict $mentor $mentee
 			} else {
 				puts "archive/wrong template: $mentor/$mentee"
@@ -363,7 +363,7 @@ if {!$manual && !$forgotten} {
 		}
 	}
 	foreach {mentor list} $dict {
-		puts [edit Benutzer_Diskussion:$mentor [set summary "{{ers:Aus Mentorenprogramm (Benachrichtigung)|[join $list |]}}"] {} / appendtext \n$summary / minor true]
+		puts [edit BD:$mentor [set summary "{{ers:Aus Mentorenprogramm (Benachrichtigung)|[join $list |]}}"] {} / appendtext \n$summary / minor true]
 	}
 }
 
