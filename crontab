@@ -1,7 +1,7 @@
 TZ=Europe/Berlin
 
 #täglich
-0 0 * * *						jsub		adt.tcl
+7 0 * * *						jsub		adt.tcl
 0 0 * * *						jsub		check.tcl
 #0 0 * * *						jsub -mem 3g	internallinks.tcl
 7 0 * * *						jsub		kurzeartikel.tcl
