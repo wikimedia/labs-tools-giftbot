@@ -10,6 +10,7 @@ alias vm='jstart -stderr -j y -v LC_ALL=$LANG -mem 1g vm.tcl'
 alias mg='jstart -stderr -j y -v LC_ALL=$LANG -mem 1g mg.tcl'
 alias sga='jstart -stderr -j y -v LC_ALL=$LANG -mem 1g sga.tcl'
 alias gvm='jstart -N gvm -stderr -j y -o /dev/null -mem 5g java -jar GVMBot.jar'
+alias gvmhelfer='jstart -stderr gvmhelfer.tcl'
 
 #disable core dumps
 ulimit -Sc0

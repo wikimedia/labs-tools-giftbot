@@ -13,6 +13,9 @@ gva:
 gvm:
 - GVMBot on freenode/#wikipedia-de-rc
 
+gvmhelfer:
+- Take over defunct GVMBot work
+
 sga:
 - automatic creation of talk pages for new arbcom cases
 
@@ -26,7 +29,7 @@ tools:
 
 1. Stopping continuous jobs
 
-	$ qdel <mg|gva|gvm|sga|vm> […]
+	$ qdel <mg|gva|gvm|gvmhelfer|sga|vm> […]
 
 Jobs can be restarted when they're actually terminated, to check:
 
@@ -38,7 +41,7 @@ If a job doesn't vanish, ask on freenode/#wikimedia-cloud to delete it.
 
 2. Starting continuous jobs
 
-	$ <mg|gva|gvm|sga|vm> [; …]
+	$ <mg|gva|gvm|gvmhelfer|sga|vm> [; …]
 
 
 3. Restarting the tools
@@ -108,7 +111,7 @@ Create wikitext parser:
 
 Start the crontab, the continuous jobs and the webservice:
 
-	$ crontab crontab; gva; gvm; mg; sga; vm; webservice --backend kubernetes tcl start
+	$ crontab crontab; gva; gvm; gvmhelfer; mg; sga; vm; webservice --backend kubernetes tcl start
 
 6. Tool monitor
 
