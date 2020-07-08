@@ -51,14 +51,16 @@ foreach {page id} {{Wikipedia:Kandidaturen von Artikeln, Listen und Portalen} 1 
 	}
 }
 
+foreach page {Wikipedia:Suchhilfe {Wikipedia:Fragen zur Wikipedia} Wikipedia:Auskunft Wikipedia:Löschprüfung} {
+	do {
+		if [regexp [set re {=[^\n]*?=\Z}] [set text [content [set ret1 [post $wiki {*}$get / titles $page / rvprop content|timestamp]]]]] {
+			puts [set ret2 [edit $page {Bot: ersetze Tagesabschnitt} [regsub $re $text "= [heading] ="] / nocreate true / basetimestamp [revision $ret1 timestamp]]]
+		} else {
+			puts [set ret2 [edit $page {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading] =" / nocreate true]]
+		}
+	} while {[exists ret2] && [dict exists $ret2 error code] && [dict get $ret2 error code] eq {editconflict}}
+}
 
-do {
-	if [regexp [set re {=[^\n]*?=\Z}] [set text [content [set ret1 [post $wiki {*}$get / titles [set page Wikipedia:Suchhilfe] / rvprop content|timestamp]]]]] {
-		puts [set ret2 [edit $page {Bot: ersetze Tagesabschnitt} [regsub $re $text "= [heading] ="] / nocreate true / basetimestamp [revision $ret1 timestamp]]]
-	} else {
-		puts [set ret2 [edit $page {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading] =" / nocreate true]]
-	}
-} while {[exists ret2] && [dict exists $ret2 error code] && [dict get $ret2 error code] eq {editconflict}}
 
 foreach {page offset} {Wikipedia:LKH 0 Wikipedia:Löschkandidaten/heute 0 Wikipedia:LKG -1 Wikipedia:Löschkandidaten/gestern -1 Wikipedia:QSH 0 Wikipedia:Qualitätssicherung/heute 0} {
 	puts [edit $page {Bot: aktualisiere Weiterleitung} [
@@ -67,7 +69,3 @@ foreach {page offset} {Wikipedia:LKH 0 Wikipedia:Löschkandidaten/heute 0 Wikipe
 		]
 	] / nocreate true]
 }
-
-puts [edit {Wikipedia:Fragen zur Wikipedia} {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading2] =" / nocreate true]
-puts [edit {Wikipedia:Auskunft} {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading2] =" / nocreate true]
-puts [edit {Wikipedia:Löschprüfung} {Bot: neuer Tagesabschnitt} {} / appendtext "\n\n= [heading2] =" / nocreate true]
