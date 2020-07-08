@@ -61,8 +61,7 @@ foreach page {Wikipedia:Suchhilfe {Wikipedia:Fragen zur Wikipedia} Wikipedia:Aus
 	} while {[exists ret2] && [dict exists $ret2 error code] && [dict get $ret2 error code] eq {editconflict}}
 }
 
-
-foreach {page offset} {Wikipedia:LKH 0 Wikipedia:Löschkandidaten/heute 0 Wikipedia:LKG -1 Wikipedia:Löschkandidaten/gestern -1 Wikipedia:QSH 0 Wikipedia:Qualitätssicherung/heute 0} {
+foreach {page offset} {Wikipedia:LKH 0 Wikipedia:Löschkandidaten/heute 0 Wikipedia:LKG -1 Wikipedia:Löschkandidaten/gestern -1 Wikipedia:LK7 -7 Wikipedia:QSH 0 Wikipedia:Qualitätssicherung/heute 0} {
 	puts [edit $page {Bot: aktualisiere Weiterleitung} [
 		regsub {\d{1,2}\. .* \d{4}} [content [post $dewiki {*}$get / titles $page]] [
 			string trim [clock format [clock add [clock seconds] $offset days] -format {%e. %B %Y} -locale de -timezone Europe/Berlin]
