@@ -2,7 +2,7 @@
 
 # Recursive Category traversal
 
-# Copyright 2010, 2014 Giftpflanze
+# Copyright 2010, 2014, 2019 Giftpflanze
 
 # This file is part of the MediaWiki Tcl Bot Framework.
 
