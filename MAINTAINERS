@@ -56,7 +56,7 @@ If it is:
 
 If it is not:
 
-	$ webservice --backend kubernetes tcl start
+	$ webservice start
 
 If it is stuck:
 
@@ -111,7 +111,7 @@ Create wikitext parser:
 
 Start the crontab, the continuous jobs and the webservice:
 
-	$ crontab crontab; gva; gvm; gvmhelfer; mg; sga; vm; webservice --backend kubernetes tcl start
+	$ crontab crontab; gva; gvm; gvmhelfer; mg; sga; vm; webservice start
 
 6. Tool monitor
 
