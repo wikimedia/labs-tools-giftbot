@@ -33,7 +33,6 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 		set firstrun false
 		do {
 			lassign {} newsections watchlist
-			set visiblesections 0
 			set ret1 [post $dewiki {*}$get / rvprop content|timestamp|comment / titles $page]
 			regexp {(.*?)([^\n]*?==.*)?$} [content $ret1] -> header sections
 			foreach {-> section} [regexp -all -inline {([^\n]*?== .*? ==\n.*)(?=[^\n]*?==|$)} $sections] {
@@ -60,14 +59,6 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 					[lindex $ret6 0]} {
 						#unreviewed
 						puts unreviewed:$user
-						if 0 {###
-						if ![llength $user] {
-							append section "{{Kasten|Dieser Eintrag würde normalerweise entfernt, aber ich kann den Benutzer nicht benachrichtigen, da die\
-							Signatur nicht ausgelesen werden konnte. – ~~~~}}\n"
-							lappend newsections $section
-							lappend summary "Fehlermeldung (\[\[$title\]\])"
-						} elseif ![regexp "\{\{Kasten" $section] {}
-						}
 						if [llength $user] {
 							puts [edit BD:$user {Dein Eintrag auf [[Wikipedia:Gesichtete Versionen/Anfragen]]}\
 							"{{subst:GESCHLECHT:{{subst:SEITENNAME}}|Lieber|Liebe|Hallo}} {{subst:SEITENNAME}},<br>ich habe deinen Eintrag \[\[:$title\]\] auf\
@@ -78,20 +69,6 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 						lappend summary "\[\[$title\]\] entfernt (Erstsichtung erforderlich)"
 					} elseif {[llength $ret5] && [llength $ret6] && [lindex $ret5 0] && [lindex $ret6 0]} {
 						#reviewed
-						if 0 {###
-							lappend summary "\[\[$title\]\] [apply {ret2 {
-								upvar user user
-								if {{comment} in [dict keys [revision $ret2]] && [regexp {Änderungen von .*? rückgängig gemacht und letzte Version von .*?\
-								wiederhergestellt} [revision $ret2 comment]]} {
-									set user [revision $ret2 user]
-									return {zurückgesetzt von}
-								} elseif {[set user [revision $ret2 flagged user]] eq [revision $ret2 user]} {
-									return {bearbeitet und gesichtet von}
-								} else {
-									return {gesichtet von}
-								}
-							}} $ret2] \[\[Benutzer:$user|$user\]\]"
-						}
 						lappend summary "\[\[$title\]\] erledigt"
 					} elseif {[llength $ret5] && ![lindex $ret5 0] || [llength $ret6] && ![lindex $ret6 0]} {
 						#oldreviewed
@@ -103,14 +80,6 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 							#too early
 							if ![regexp {time:YmdHis} $section] {
 								puts delayed:$user
-								if 0 {###
-								if ![llength $user] {
-									append section "{{Kasten|Dieser Eintrag würde normalerweise versteckt, aber ich kann den Benutzer nicht\
-									benachrichtigen, da die Signatur nicht ausgelesen werden konnte. – ~~~~}}\n"
-									lappend newsections $section
-									lappend summary "Fehlermeldung (\[\[$title\]\])"
-								} elseif ![regexp "\{\{Kasten" $section] {}
-								}
 								if [llength $user] {
 									puts [edit BD:$user {Dein Eintrag auf [[Wikipedia:Gesichtete Versionen/Anfragen]]}\
 									"{{subst:GESCHLECHT:{{subst:SEITENNAME}}|Lieber|Liebe|Hallo}} {{subst:SEITENNAME}},<br>ich habe deinen Eintrag\
@@ -132,13 +101,6 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 					}
 				} else {
 					#missing page or invalid title or special page
-					if 0 {###
-					if ![llength $user] {
-						append section "{{Kasten|Der Benutzer konnte nicht benachrichtigt werden, da die Signatur nicht ausgelesen werden konnte. – ~~~~}}\n"
-						lappend newsections $section
-						lappend summary "Fehlermeldung (\[\[$title\]\])"
-					}
-					}
 					if [catch {
 						if {[clock scan [join [regexp -inline {[0-9]{2}:[0-9]{2}, [0-9]{1,2}\. (?:(?:Jan|Feb|Mär|Apr|Jun|Jul|Aug|Sep|Okt|Nov|Dez)\.*|Mai)\
 						[0-9]{4} \(CES{0,1}T\)} $section]] -format {%H:%M, %d. %b. %Y (%Z)} -timezone Europe/Berlin -locale de] >= [clock add [clock seconds]\
@@ -164,9 +126,6 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 						lappend newsections $section
 					}
 				}
-			}
-			debug {
-				puts $watchlist
 			}
 			if [exists summary] {
 				if ![llength $newsections] {
