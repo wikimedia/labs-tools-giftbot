@@ -51,7 +51,7 @@ while {[FCGI_Accept] >= 0} {
 			link rel=stylesheet href=weblinksuche.css media=screen -
 		}
 		body ! {
-			h1 + $title
+			h1 - $title
 			div ! {
 				form method=get action=$env(SCRIPT_NAME) ! {
 					fieldset ! {

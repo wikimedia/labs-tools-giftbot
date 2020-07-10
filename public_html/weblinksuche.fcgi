@@ -66,7 +66,7 @@ while {[FCGI_Accept] >= 0} {
 			link rel=stylesheet href=weblinksuche.css media=screen -
 		}
 		body ! {
-			h1 + $title
+			h1 - $title
 			div ! {
 				p + {
 					Dieses Tool ermöglicht, analog zu [a href=${wppath}[set link Spezial:Weblinksuche] $link], die Suche nach Seiten, in denen bestimmte Weblinks enthalten\
