@@ -27,7 +27,9 @@ set dewiki_p [get-db dewiki]
 set token [login [set wiki $dewiki]]
 
 set text1 [content [post $dewiki {*}$get / titles $intro]]
-set cats [lmap cat [struct::set union {*}[lmap {-> cat} [regexp -all -inline {\[\[:(Kategorie:.*?)\|} $text1] {list $cat {*}[cat $cat 14]}]] {string map {Kategorie: {}} $cat}]
+set cats [lmap cat [struct::set union {*}[lmap {-> cat} [regexp -all -inline {\[\[:(Kategorie:.*?)\|} $text1] {
+	list $cat {*}[cat $cat 14 Kategorie:Wikipedia:Kategorienlöschung]
+}]] {string map {Kategorie: {}} $cat}]
 
 set text2 [content [post $dewiki {*}$get / titles $exceptions]]
 set exceptions [lmap {-> exception} [regexp -all -inline {\[\[(.*?)\]\]} $text2] {set exception}]
