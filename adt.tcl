@@ -77,4 +77,4 @@ set text [regsub -all {(\]\]|>)(\n''')} $text \\1\n\\2]; # blank subtopic lines
 set text [regsub -all {\|(\n===)} $text |\n\\1]; # blank topic lines
 
 set token [login [set wiki $dewiki]]
-puts [edit {Wikipedia:Hauptseite/Artikel des Tages/Fundus} {Bot:Aktualisierung} $text / minor]
+puts [edit {Wikipedia:Hauptseite/Artikel des Tages/Fundus} {Bot: Aktualisierung} $text / minor]
