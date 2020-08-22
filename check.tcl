@@ -38,7 +38,7 @@ if {0 || !$manual && !$forgotten} {
 
 	#WP:MP
 	foreach template [lrange [regexp -all -inline {\{\{.*?\n\}\}} [set text [content $ret1]]] 1 end] {
-		regexp {\n\| Mentor = *?([^ ].*?)\n} $template -> mentor
+		regexp {\n\| *?Mentor *= *([^ ].*?)\n} $template -> mentor
 		regsub { {{Anker\|.*?}}} $mentor {} mentor
 		set mentor [string toupper $mentor 0 0]
 		set ret14 [post $dewiki {*}$lastcontrib / ucuser $mentor]
