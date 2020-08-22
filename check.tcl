@@ -24,7 +24,9 @@ dict for {key value} [cmdline::getKnownOptions argv {{manual} {all} {forgotten}}
 set wpmp Wikipedia:Mentorenprogramm
 set utmpl {Benutzer:%s/Vorlage Mentor}
 set wmtmpl Mentorenprogramm/preload/Wunschmentor/
+set wmcat {Kategorie:Benutzer:Wunschmentor gesucht}
 set optin Wikipedia:Mentorenprogramm/Projektorganisation/Opt-in-Liste
+set ml Wikipedia:Mentorenprogramm/Mailingliste
 
 set botpausedmentors [read [set file [open botpausedmentors]]][close $file]
 
@@ -400,7 +402,7 @@ foreach {mentor mentees} $dictactivity {
 }
 
 #Mailingliste
-set ret7 [post $dewiki {*}$get / titles Wikipedia:Mentorenprogramm/Mailingliste / rvsection 1]
+set ret7 [post $dewiki {*}$get / titles $ml / rvsection 1]
 foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|.*?\]\]} [content $ret7]] {
 	if {"Benutzer:[string toupper $mentor 0 0]" ni $catmentors} {
 		puts "no mentor @ ml: $mentor"
@@ -408,7 +410,7 @@ foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|.*?\]\]}
 }
 
 #Co-Mentoren bei WM-Gesuchen benachrichtigen
-set ret10 [post $dewiki {*}$catmem / cmtitle {Kategorie:Benutzer:Wunschmentor gesucht}]
+set ret10 [post $dewiki {*}$catmem / cmtitle $wmcat]
 set ret13 [post $dewiki {*}$get / titles $optin / rvsection 2]
 foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|} [content $ret13]] {
 	if {"Benutzer:$mentor" ni $catmentors} {
