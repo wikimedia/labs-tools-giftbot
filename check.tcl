@@ -396,7 +396,7 @@ foreach {mentor mentees} $dictactivity {
 
 #Mailingliste
 set ret7 [post $dewiki {*}$get / titles Wikipedia:Mentorenprogramm/Mailingliste / rvsection 1]
-foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)?:(.*?)\|.*?\]\]} [content $ret7]] {
+foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|.*?\]\]} [content $ret7]] {
 	if {"Benutzer:[string toupper $mentor 0 0]" ni $catmentors} {
 		puts "no mentor @ ml: $mentor"
 	}
