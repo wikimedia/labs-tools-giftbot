@@ -21,10 +21,10 @@ dict for {key value} [cmdline::getKnownOptions argv {{manual} {all} {forgotten}}
 	set $key $value
 }
 
-set wpmp {Wikipedia:Mentorenprogramm}
+set wpmp Wikipedia:Mentorenprogramm
 set utmpl {Benutzer:%s/Vorlage Mentor}
-set wmtmpl {Mentorenprogramm/preload/Wunschmentor/}
-set optin {Wikipedia:Mentorenprogramm/Projektorganisation/Opt-in-Liste}
+set wmtmpl Mentorenprogramm/preload/Wunschmentor/
+set optin Wikipedia:Mentorenprogramm/Projektorganisation/Opt-in-Liste
 
 set botpausedmentors [read [set file [open botpausedmentors]]][close $file]
 
