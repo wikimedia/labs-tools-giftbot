@@ -241,7 +241,7 @@ if {0 || !$manual && !$forgotten} {
 	set dewiki_p [get-db dewiki]
 	set templates [mysqlsel $dewiki_p "select page_title from page where page_title like '%/Vorlage\\_Mentor' and page_namespace = 2" -list]
 	foreach template $templates {
-		if {"Benutzer:[set mentor [string map {_ { } {/Vorlage_Mentor} {}} $template]]" ni $catmentors && $mentor ni {{Church of emacs/static} Reimmichl-212}} {
+		if {"Benutzer:[set mentor [string map {_ { } {/Vorlage_Mentor} {}} $template]]" ni $catmentors && $mentor ni {{Church of emacs/static} Reimmichl-212 {Anka Friedrich} CennoxX}} {
 			puts "no mentor @ utmpl $mentor"
 		}
 	}
