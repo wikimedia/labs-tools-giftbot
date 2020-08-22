@@ -21,5 +21,6 @@ set embeddedin "$query / list embeddedin / eilimit max"; # / eititle (Template:)
 set allpages "$query / list allpages / aplimit max"; # / apnamespace ~ / apprefix/apfrom ~
 set lastcontrib "$query / list usercontribs / uclimit 1 / ucprop timestamp"; # ucuser ~
 set redirect "$query / prop info / redirects true"; # titles ~
+set email "$format / action emailuser"; # target ~ / subject ~ / text ~
 
 return

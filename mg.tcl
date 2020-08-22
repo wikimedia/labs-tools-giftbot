@@ -92,9 +92,9 @@ register-rc de.wikipedia {{- - title args} {
 								puts [edit BD:$wm "\[\[$item|\]\] wünscht sich dich als Mentor" {Ein Mentee hat dich als Wunschmentor angegeben. – ~~~~} / section new]
 							}
 							if {[string first "\[\[Benutzer:$wm|" [content [post $dewiki {*}$get / titles $optin / rvsection 2]]] >= 0} {
-								puts [post $dewiki {*}$token {*}$format / action emailuser / target $wm / subject "Wikipedia: $item wünscht sich dich als Mentor"\
-								 / text "Du erhältst diese Nachricht, weil du in $optin eingetragen bist. Wenn du diese E-Mails nicht mehr erhalten möchtest,\
-								 kannst du dich dort austragen."]
+								puts [post $dewiki {*}$token {*}$email / target $wm / subject "Wikipedia: $item wünscht sich dich als Mentor" / text "Du\
+								 erhältst diese Nachricht, weil du in $optin eingetragen bist.  Wenn du diese E-Mails nicht mehr erhalten möchtest, kannst du\
+								 dich dort austragen."]
 							}
 						} else {
 							lappend neulist($no) "bereits betreut"
