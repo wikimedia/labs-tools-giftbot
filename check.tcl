@@ -313,6 +313,11 @@ foreach page [catmem $ret4] {
 }} {*}$catmem / cmtitle Kategorie:Benutzer:Mentee / cmprop title|timestamp
 
 set ret8 [post $dewiki {*}$get / titles $optin / rvsection 1]
+foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|} [content $ret8]] {
+	if {"Benutzer:$mentor" ni $catmentors} {
+		puts "no mentor @ optin#1: $mentor"
+	}
+}
 if !$manual {
 	#Benachrichtigung Betreuungsdauer
 	foreach {mentor mentees} $dictduration {
@@ -405,6 +410,11 @@ foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|.*?\]\]}
 #Co-Mentoren bei WM-Gesuchen benachrichtigen
 set ret10 [post $dewiki {*}$catmem / cmtitle {Kategorie:Benutzer:Wunschmentor gesucht}]
 set ret13 [post $dewiki {*}$get / titles $optin / rvsection 2]
+foreach {-> mentor} [regexp -all -inline {# \[\[Benutzer(?:in)??:(.*?)\|} [content $ret13]] {
+	if {"Benutzer:$mentor" ni $catmentors} {
+		puts "no mentor @ optin#2: $mentor"
+	}
+}
 foreach item [catmem $ret10] {
 	set ret12 [post $dewiki {*}$get / titles [set title [dict get $item title]]]
 	regexp {{{Mentor gesucht\|(.*?)(\|ja){0,1}}}} [content $ret12] -> wm notified
