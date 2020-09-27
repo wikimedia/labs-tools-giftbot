@@ -443,7 +443,7 @@ foreach item [catmem $ret10] {
 				edit BD:$co "\[\[$title|\]\] wünscht sich $wm als Mentor" {Das Wunschmentorengesuch blieb seit einem Tag unbearbeitet, schau doch bitte mal, was du als\
 				 Co-Mentor machen kannst. – ~~~~} / section new
 				if {[string first "$co" [content $ret13]] >= 0} {
-					post $dewiki {*}$token {*}$email / target $co / subject "Wikipedia: $title wünscht sich $wm als Mentor" / text "Das Wunschmentorengesuch blieb seit\
+					post $dewiki {*}$token {*}$emailuser / target $co / subject "Wikipedia: $title wünscht sich $wm als Mentor" / text "Das Wunschmentorengesuch blieb seit\
 					 einem Tag unbearbeitet, schau doch bitte mal, was du als Co-Mentor machen kannst. Du erhältst diese Nachricht, weil du in $optin eingetragen bist.\
 					 Wenn du diese E-Mails nicht mehr erhalten möchtest, kannst du dich dort austragen."
 				}

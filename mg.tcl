@@ -44,7 +44,7 @@ set fnh [register-fn $channel {{sender - recipient message} {
 }}]
 
 register-rc de.wikipedia {{- - title args} {
-	global dewiki catmem get format fnh oldlist newlist wiki token optin lastcontrib channel
+	global dewiki catmem get format fnh oldlist newlist wiki token optin lastcontrib channel emailuser
 	if [regexp ^Benutzer(in)?: $title] {
 		array set newlist {1 {} 2 {}}
 		foreach {no category} {2 {Kategorie:Benutzer:Wunschmentor gesucht} 1 {Kategorie:Benutzer:Mentor gesucht}} {
@@ -92,7 +92,7 @@ register-rc de.wikipedia {{- - title args} {
 								puts [edit BD:$wm "\[\[$item|\]\] wünscht sich dich als Mentor" {Ein Mentee hat dich als Wunschmentor angegeben. – ~~~~} / section new]
 							}
 							if {[string first "\[\[Benutzer:$wm|" [content [post $dewiki {*}$get / titles $optin / rvsection 2]]] >= 0} {
-								puts [post $dewiki {*}$token {*}$email / target $wm / subject "Wikipedia: $item wünscht sich dich als Mentor" / text "Du\
+								puts [post $dewiki {*}$token {*}$emailuser / target $wm / subject "Wikipedia: $item wünscht sich dich als Mentor" / text "Du\
 								 erhältst diese Nachricht, weil du in $optin eingetragen bist.  Wenn du diese E-Mails nicht mehr erhalten möchtest, kannst du\
 								 dich dort austragen."]
 							}
