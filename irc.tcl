@@ -15,10 +15,18 @@
 # Call [vwait exit] to start listening
 
 proc handler {handle callback callback2} {
+	global connectivity
 	if {[gets $handle line] < 0} {
 		puts {broken socket}
 		exit 1
 	}
+	if [info exists connectivity($handle)] {
+		after cancel $connectivity($handle)
+	}
+	set connectivity($handle) [after 300000 {
+		puts {inactivity}
+		exit 1
+	}]
 	set list [split $line]
 	if {[lindex $list 0] eq {PING}} {
 		puts $handle "PONG [info hostname] [lindex $list 1]"
@@ -75,8 +83,9 @@ proc register-lc {channels callback} {
 }
 
 proc bgerror {msg} {
-	global fnh
+	global fnh errorInfo
 	puts stderr $msg
+	puts stderr $errorInfo
 	catch {puts $fnh "QUIT :[lindex [split $errorInfo \n] 0]"}
 	exit 1
 }
