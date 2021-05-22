@@ -21,8 +21,14 @@ source ../library.tcl
 
 set dewiki [get-db dewiki]
 set wppath https://de.wikipedia.org/wiki/
-set namespaces_common {1 Diskussion 2 Benutzer 3 {Benutzer Diskussion} 4 Wikipedia 5 {Wikipedia Diskussion} 6 Datei 7 {Datei Diskussion} 8 MediaWiki 9 {MediaWiki Diskussion} 10 Vorlage\
- 11 {Vorlage Diskussion} 12 Hilfe 13 {Hilfe Diskussion} 14 Kategorie 15 {Kategorie Diskussion} 100 Portal 101 {Portal Diskussion} 828 Modul 829 {Modul Diskussion}}
+
+set namespaces_common {
+	1 Diskussion 2 Benutzer 3 {Benutzer Diskussion}
+	4 Wikipedia 5 {Wikipedia Diskussion} 6 Datei 7 {Datei Diskussion}
+	8 MediaWiki 9 {MediaWiki Diskussion} 10 Vorlage 11 {Vorlage Diskussion}
+	12 Hilfe 13 {Hilfe Diskussion} 14 Kategorie 15 {Kategorie Diskussion}
+	100 Portal 101 {Portal Diskussion} 828 Modul 829 {Modul Diskussion}
+}
 set namespaces_list [list {} alle 0 (Artikel-) {*}$namespaces_common]
 set namespaces_lookup [list 0 {} {*}$namespaces_common]
 
@@ -68,20 +74,18 @@ while {[FCGI_Accept] >= 0} {
 		body ! {
 			h1 - $title
 			div ! {
-				p + {
-					Dieses Tool ermöglicht, analog zu [a href=${wppath}[set link Spezial:Weblinksuche] $link], die Suche nach Seiten, in denen bestimmte Weblinks enthalten\
-					 sind, allerdings kann die Suche auch nach Namensräumen gefiltert werden und es wird die Gesamtanzahl der gefundenen Links angegeben.
-				}
-				p + {
-					Als Platzhalter können [code . %] und [code . _] benutzt werden. Dabei steht [code . %] für mehrere (auch null) Zeichen und [code . _] für genau 1\
-					 Zeichen (Beispiele: [code http://%.wikipedia.org/wiki/%], [code http://www.wiki_edia.org/]). Sollen die Zeichen [code . %] oder [code . _] Teil der URL\
-					 sein, müssen sie mit [code . \\] maskiert werden (Beispiele: [code http://de.wikipedia.org/wiki/\\%25-Darstellung], [code\
-					 http://de.wikipedia.org/wiki/Erster\\_Weltkrieg]).
-				}
-				p + {
-					Das Protokoll muss immer mit angegeben werden (es gibt aber auch protokollrelative URLs, die\ mit [code //] beginnen). Ist die URL am Ende nicht\
-					 vollständig, muss sie mit einem Prozentzeichen abgeschlossen werden.
-				}
+				p - Dieses Tool ermöglicht, analog zu [a href=${wppath}[set link Spezial:Weblinksuche] $link], die Suche\
+					nach Seiten, in denen bestimmte Weblinks enthalten sind, allerdings kann die Suche auch nach\
+					Namensräumen gefiltert werden und es wird die Gesamtanzahl der gefundenen Links angegeben.
+				p - Als Platzhalter können [code . %] und [code . _] benutzt werden. Dabei steht [code . %] für mehrere\
+					(auch null) Zeichen und [code . _] für genau 1 Zeichen (Beispiele: [code\
+					http://%.wikipedia.org/wiki/%], [code http://www.wiki_edia.org/]). Sollen die Zeichen [code . %]\
+					oder [code . _] Teil der URL sein, müssen sie mit [code . \\] maskiert werden (Beispiele: [code\
+					http://de.wikipedia.org/wiki/\\%25-Darstellung], [code\
+					http://de.wikipedia.org/wiki/Erster\\_Weltkrieg]).
+				p - Das Protokoll muss immer mit angegeben werden (es gibt aber auch protokollrelative URLs, die mit [code\
+					//] beginnen). Ist die URL am Ende nicht vollständig, muss sie mit einem Prozentzeichen\
+					abgeschlossen werden.
 				form method=get action=$env(SCRIPT_NAME) ! {
 					fieldset ! {
 						label for=target - Suchmuster:
@@ -105,27 +109,48 @@ while {[FCGI_Accept] >= 0} {
 				}
 				if [string length $target] {
 					if [catch {
-						set count [mysqlsel $dewiki "select count(distinct el_to, page_namespace, page_title) from externallinks, page where el_from = page_id and\
-						 el_to like '[mysqlescape $target]' [expr {[string length $namespace]?($associated?"and page_namespace in ([expr {[mysqlescape\
-						 $namespace]/2*2}],[expr {[mysqlescape $namespace]/2*2+1}])":"and page_namespace = [mysqlescape $namespace]"):{}}]" -list]
-						set resultnum [mysqlsel $dewiki "select distinct el_to, page_namespace, page_title from externallinks, page where el_from = page_id and\
-						 el_to like '[mysqlescape $target]' [expr {[string length $namespace]?($associated?"and page_namespace in ([expr {[mysqlescape\
-						 $namespace]/2*2}],[expr {[mysqlescape $namespace]/2*2+1}])":"and page_namespace = [mysqlescape $namespace]"):{}}] limit [mysqlescape $limit]\
-						 offset [mysqlescape $offset]"]
+						set expressions {distinct el_to, page_namespace, page_title}
+						set conditions\
+						"from externallinks, page\
+						where el_from = page_id\
+						and el_to like '[mysqlescape $target]'\
+						[expr {
+							[string length $namespace]
+							? (
+								$associated
+								? "and page_namespace in ([expr {
+									[mysqlescape $namespace]/2*2
+								}], [expr {
+									[mysqlescape $namespace]/2*2+1
+								}])"
+								: "and page_namespace = [mysqlescape $namespace]"
+							)
+							: {}
+						}]"
+						set modifiers "limit [mysqlescape $limit] offset [mysqlescape $offset]"
+						foreach var {count resultnum} query [list\
+							"count($expressions) $conditions"\
+							"$expressions $conditions $modifiers"\
+						] option -list {
+							set $var [mysqlsel $dewiki "select $query" {*}$option]
+						}
 					}] {
-						after 300000
+						after 300000; # 5 minute restart throttle
 						exit
 					}
 					div ! {
 						if $resultnum {
 							set resultnum [expr {min($resultnum,$limit)}]
-							p - Hier [expr {$resultnum==1?{ist}:{sind}}] [b . $resultnum] von $count [expr {$count==1?{Ergebnis}:{Ergebnissen}}], beginnend mit\
-								Nummer [b [expr {$offset+1}].]
+							p - Hier [expr {$resultnum==1?{ist}:{sind}}] [b . $resultnum] von $count [expr\
+								{$count==1?{Ergebnis}:{Ergebnissen}}], beginnend mit Nummer [b [expr\
+								{$offset+1}].]
 							paging_header $query $resultnum $limit $offset
 							ol start=[expr {$offset+1}] ! {
 								mysqlmap $dewiki {to ns title} {
-									li - [a href=$to $to] ist verlinkt von [a href=${wppath}[uri::urn::quote [set title [set\
-									ns [dict get $namespaces_lookup $ns]][expr {[llength $ns]?{:}:{}}]$title]] . [string map {_ { }} $title]]
+									li - [a href=$to $to] ist verlinkt von [a\
+										href=${wppath}[uri::urn::quote [set title [set ns [dict get\
+										$namespaces_lookup $ns]][expr {[llength\
+										$ns]?{:}:{}}]$title]] . [string map {_ { }} $title]]
 								}
 							}
 							paging_header $query $resultnum $limit $offset
@@ -135,11 +160,7 @@ while {[FCGI_Accept] >= 0} {
 					}
 				}
 			}
-			div ! {
-				p ! {
-					a href=https://gerrit.wikimedia.org/r/plugins/gitiles/labs/tools/giftbot/+/master/public_html/weblinksuche.fcgi - Quelltext
-				}
-			}
+			div - [p [a href=https://gerrit.wikimedia.org/r/plugins/gitiles/labs/tools/giftbot/+/master/public_html/weblinksuche.fcgi Quelltext]]
 		}
 	}] {
 		pre - $errorInfo
