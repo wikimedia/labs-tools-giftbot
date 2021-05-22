@@ -15,5 +15,5 @@ package require mysqltcl
 set dbuser [string trim [ini::value [set ini [ini::open $env(HOME)/replica.my.cnf r]] client user] '][ini::close $ini][unset ini]
 
 proc get-db {server {db {}}} {
-	mysqlconnect -reconnect 1 -host $server.web.db.svc.eqiad.wmflabs -db [expr {[llength $db]?$db:"${server}_p"}]
+	mysqlconnect -reconnect 1 -host $server.web.db.svc.wikimedia.cloud -db [expr {[llength $db]?$db:"${server}_p"}]
 }
