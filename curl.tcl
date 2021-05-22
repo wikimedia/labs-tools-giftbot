@@ -41,8 +41,10 @@ proc post {handle args} {
 		$handle perform
 	} until {
 		!([dict exists [get $body] error code] &&
-		[get $body error code] eq {mwoauth-invalid-authorization} &&
-		[string match {*Nonce already used*} [get $body error info]]) &&
+		([get $body error code] eq {mwoauth-invalid-authorization} &&
+		[string match {*Nonce already used*} [get $body error info]] ||
+		[get $body error code] eq {readonly} &&
+		[true {after 300000}])) &&
 		[true {debug {puts $args; puts [get $body]}}] &&
 		[catch {
 			after [expr {[set replag $headers(Retry-After)]*1000}]
