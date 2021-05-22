@@ -1,6 +1,6 @@
 # irc.tcl Library
 
-# Accessing Wikimedia and Freenode IRC
+# Accessing Wikimedia and Freenode/Libera Chat IRC
 
 # Copyright 2010, 2011, 2012, 2014, 2018 Giftpflanze
 
@@ -63,9 +63,9 @@ proc register-rc {channels callback} {
 	}} $callback
 }
 
-proc register-fn {channels callback} {
-	global self ircpassword
-	register-irc $self chat.freenode.org $ircpassword $channels {{line callback} {
+proc register-lc {channels callback} {
+	global self liberapwd
+	register-irc $self irc.libera.chat $liberapwd $channels {{line callback} {
 		if ![regexp {:([^ ]+)![^ ]+@([^ ]+) PRIVMSG ([^ ]+) :(.*)} $line -> nick host recipient msg] {
 			puts parse-error:$line
 		} else {

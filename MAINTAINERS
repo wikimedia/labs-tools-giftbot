@@ -4,17 +4,17 @@ MAINTAINING GIFTBOT
 0. Job descriptions
 
 mg:
-- GiftBot on freenode/#wikipedia-de-mp
+- GiftBot on libera/#wikipedia-de-mp
 - notifying mentors on new Wunschmentorengesuche
 
 gva:
 - cleaning up WP:Gesichtete Versionen/Anfragen
 
-gvm:
+gvm-fn:
 - GVMBot on freenode/#wikipedia-de-rc
 
-gvmhelfer:
-- Take over defunct GVMBot work
+gvm-lc:
+- GVMBot on libera/#wikipedia-de-rc
 
 sga:
 - automatic creation of talk pages for new arbcom cases
@@ -29,19 +29,19 @@ tools:
 
 1. Stopping continuous jobs
 
-	$ qdel <mg|gva|gvm|gvmhelfer|sga|vm> […]
+	$ qdel <mg|gva|gvm-fn|gvm-lc|sga|vm> […]
 
 Jobs can be restarted when they're actually terminated, to check:
 
 	$ qstat
 
 They mustn't appear in the output.
-If a job doesn't vanish, ask on freenode/#wikimedia-cloud to delete it.
-
+If a job doesn't vanish, ask on libera/#wikimedia-cloud to delete it.
+An alternative might be to go to the node and kill it.
 
 2. Starting continuous jobs
 
-	$ <mg|gva|gvm|gvmhelfer|sga|vm> [; …]
+	$ <mg|gva|gvm-fn|gvm-lc|sga|vm> [; …]
 
 
 3. Restarting the tools
@@ -111,7 +111,7 @@ Create wikitext parser:
 
 Start the crontab, the continuous jobs and the webservice:
 
-	$ crontab crontab; gva; gvm; gvmhelfer; mg; sga; vm; webservice start
+	$ crontab crontab; gva; gvm-fn; gvm-lc; mg; sga; vm; webservice start
 
 6. Tool monitor
 

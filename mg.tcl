@@ -25,7 +25,7 @@ foreach array {oldlist newlist} {
 	array set $array {1 {} 2 {}}
 }
 
-set fnh [register-fn $channel {{sender - recipient message} {
+set fnh [register-lc $channel {{sender - recipient message} {
 	global fnh newlist channel
 	if {$message eq {%status}} {
 		if {$recipient ne "#$channel"} {

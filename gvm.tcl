@@ -1,8 +1,9 @@
 #!/data/project/shared/tcl/bin/tclsh8.7
 
-# gvmhelfer.tcl
+# gvm.tcl
 
-# Replace no longer working GVMBot functions
+# GVMBot replacement
+# Report new and done sections on de:WP:VM and suspicious edits
 
 # Copyright 2020 Giftpflanze
 
@@ -24,9 +25,9 @@ proc get-sections {} {
 	}
 }
 
-set self GVMBotHelfer
+set self GVMBot
 set watchlist [get-sections]
-set fnh [register-fn [set channel wikipedia-de-rc] {args {}}]
+set fnh [register-lc [set channel wikipedia-de-rc] {args {}}]
 
 register-rc de.wikipedia {{- - title args} {
 	global watchlist fnh channel

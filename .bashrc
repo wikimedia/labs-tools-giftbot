@@ -9,8 +9,8 @@ alias gva='jstart -stderr gva.tcl'
 alias vm='jstart -stderr vm.tcl'
 alias mg='jstart -stderr mg.tcl'
 alias sga='jstart -stderr sga.tcl'
-alias gvm='jstart -N gvm -stderr -o /dev/null -mem 5g java -jar GVMBot.jar'
-alias gvmhelfer='jstart -stderr gvmhelfer.tcl'
+alias gvm-fn='jstart -N gvm-fn -stderr -o /dev/null -mem 5g java -jar GVMBot.jar'
+alias gvm-lc='jstart -N gvm-lc -stderr gvm.tcl'
 
 #disable core dumps
 ulimit -Sc0
