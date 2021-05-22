@@ -51,7 +51,7 @@ foreach {title id} {{Wikipedia:Kandidaturen von Artikeln, Listen und Portalen} 1
 	}
 }
 
-foreach title {Wikipedia:Suchhilfe {Wikipedia:Fragen zur Wikipedia} Wikipedia:Auskunft Wikipedia:Löschprüfung} {
+foreach title {{Wikipedia:Fragen zur Wikipedia} Wikipedia:Auskunft Wikipedia:Löschprüfung} {
 	do {
 		if [regexp [set re {=[^\n]*?=\Z}] [set text [content [set ret1 [post $wiki {*}$get / titles $title / rvprop content|timestamp]]]]] {
 			puts [set ret2 [edit $title {Bot: ersetze Tagesabschnitt} [regsub $re $text "= [heading] ="] / nocreate true / basetimestamp [revision $ret1 timestamp]]]
