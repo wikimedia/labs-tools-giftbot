@@ -2,7 +2,7 @@
 
 # gvabot
 
-# Cleanup of the German Wikipedia FlaggedRevision requests page
+# Cleanup of the German Wikipedia FlaggedRevisions requests page
 
 # Copyright 2010, 2011, 2012, 2013, 2014, 2017 Giftpflanze
 
@@ -80,9 +80,9 @@ register-rc de.wikipedia {{channel - title action - user - comment} {
 						lappend summary "\[\[$title\]\] erledigt"
 					} elseif {[llength $ret5] && ![lindex $ret5 0] || [llength $ret6] && ![lindex $ret6 0]} {
 						#oldreviewed
+					    set ts [clock format [clock add [clock seconds] -1 day] -format %Y%m%d%H%M%S]
 					    if {$title ni $watchlist} {
-						if {[llength $ret5] && ([lindex $ret5 1] eq {} || [lindex $ret5 1] < [set ts [clock format [clock add [clock seconds] -1 day]\
-						-format %Y%m%d%H%M%S]]) || [llength $ret6] && ([lindex $ret6 1] eq {} || [lindex $ret6 1] < $ts)} {
+						if {[llength $ret5] && ([lindex $ret5 1] eq {} || [lindex $ret5 1] < $ts) || [llength $ret6] && ([lindex $ret6 1] eq {} || [lindex $ret6 1] < $ts)} {
 							lappend newsections $section
 						} else {
 							#too early
