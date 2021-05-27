@@ -5,10 +5,10 @@ MAINTAINING GIFTBOT
 
 mg:
 - GiftBot on libera/#wikipedia-de-mp
-- notifying mentors on new Wunschmentorengesuche
+- notify mentors on new Wunschmentorengesuche
 
 gva:
-- cleaning up WP:Gesichtete Versionen/Anfragen
+- clean up WP:Gesichtete Versionen/Anfragen
 
 gvm-fn:
 - GVMBot on freenode/#wikipedia-de-rc
@@ -17,10 +17,10 @@ gvm-lc:
 - GVMBot on libera/#wikipedia-de-rc
 
 sga:
-- automatic creation of talk pages for new arbcom cases
+- create talk pages for new arbcom cases
 
 vm:
-- closing Vandalismusmeldungen when a page is protected
+- close vandalism reports when a page is protected
 
 tools:
 - weblinksuche.fcgi
@@ -36,8 +36,8 @@ Jobs can be restarted when they're actually terminated, to check:
 	$ qstat
 
 They mustn't appear in the output.
-If a job doesn't vanish, ask on libera/#wikimedia-cloud to delete it.
-An alternative might be to go to the node and kill it.
+If a job doesn't vanish, go to the grid node and kill it.
+
 
 2. Starting continuous jobs
 
